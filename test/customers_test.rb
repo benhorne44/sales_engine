@@ -9,10 +9,10 @@ class CustomerTest < MiniTest::Test
     customer_data = CSV.read'../data/customers_test.csv', headers: true, header_converters: :symbol
     @customer = Customer.new
   end
-
 end
 
 class CustomerRepositoryTest < MiniTest::Test
+
   def setup
     @customer_data = CSV.read'../data/customers_test.csv', headers: true, header_converters: :symbol
     @cr = CustomerRepository.new
@@ -35,8 +35,24 @@ class CustomerRepositoryTest < MiniTest::Test
     refute_equal response, expected
   end
 
-  def test_it_finds_by_name
-    
+  def test_it_finds_by_first_name
+    response = @cr.find_all_by_first_name('Joey')
+    assert_equal 'Alice', response
+  end
+
+  def test_it_finds_one_by_first_name
+    response = @cr.find_by_first_name('Joey')
+    assert_equal 'Alice', response
+  end
+
+  def test_it_finds_by_last_name
+    response = @cr.find_all_by_last_name('Ondricka')
+    assert_equal 'Ondricka', response
+  end
+
+  def test_it_finds_one_by_last_name
+    response = @cr.find_by_last_name('Ondricka')
+    assert_equal 'Ondricka', response
   end
 
 end
