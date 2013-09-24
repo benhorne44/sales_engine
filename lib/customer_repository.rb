@@ -1,14 +1,17 @@
+require 'csv'
 class CustomerRepository
   # def initialize
   #   load_file
   # end
-  def load_file
-    @contents = CSV.read'../data/customers_test.csv', headers: true, header_converters: :symbol
+  def load_file(filename='')
+    if filename == ''
+      filename = '../data/customers.csv'
+    end
+    @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
   end
 
   def format_customer_into_hash
-    load_file
     headers = ['customer_id', 'customer_first_name', 'customer_last_name', 'customer_created_at', 'customer_updated_at']
     @customers = []
     @contents.each do |row|
@@ -30,12 +33,62 @@ class CustomerRepository
     @customers.sample
   end
 
-  def find_by_name
+  def find_all_by_first_name(input)
     format_customer_into_hash
-    @customers.each do |attendee|
-      if customer[]
-        
+    @results = []
+    @customers.each do |customer|
+      if customer["customer_first_name"] == input
+      # if customer.find{|key, hash| key == "customer_first_name" && hash == input}
+       @results.push customer
       end
+    end
+    return @results
+  end
+
+  def find_by_first_name(input)
+    format_customer_into_hash
+    @results = []
+    @customers.each do |customer|
+      if customer.find{|key, hash| key == "customer_first_name" && hash == input}
+      @results.push customer
+      break
+      end
+    end
+    return @results
+  end
+
+  def find_all_by_last_name(input)
+    format_customer_into_hash
+    @results = []
+    @customers.each do |customer|
+     if customer.find{|key, hash| key == "customer_last_name" && hash == input}
+     @results.push customer
+     end
+    end
+    return @results
+  end
+
+  def find_by_last_name(input)
+    format_customer_into_hash
+    @results = []
+    @customers.each do |customer|
+      if customer.find{|key, hash| key == "customer_last_name" && hash == input}
+      @results.push customer
+      break
+      end
+    end
+    return @results
+  end
+
+  def find_by_id(input)
+    format_customer_into_hash
+    @results = []
+    @customers.each do |customer|
+      if customer.find{|key, hash| key == "id" && hash == input}
+      @results.push customer
+      end
+    end
+    return @results
   end
 
   def create_customer_object

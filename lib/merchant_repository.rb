@@ -1,30 +1,48 @@
 require 'csv'
-
 class MerchantRepository
-
-  def load
-    contents = CSV.read "../data/merchants.csv", headers: true, header_converters: :symbol
-    @formatted_merchants = []
-    contents.each do |row|
-      merchant_id = row[:id]
-      item_id = row[:item_id]
-      invoice_id = row[:invoice_id]
-      quantity = row[:quantity]
-      unit_price = row[:unit_price]
-      created_at = row[:created_at]
-      updated_at = row[:updated_at]
-
-      @formatted_merchants.push([merchant_id, item_id, invoice_id, quantity, unit_price, created_at, updated_at])
+  # def initialize
+  #   load_file
+  # end
+  def load_file(filename='')
+    if filename == ''
+      filename = '../data/merchants.csv'
     end
+    @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
   end
 
-  def all
-    load
-    puts @formatted_merchants
+  def format_merchant_data_into_hash
+    # load_file
+    headers = ['merchant_id', 'merchant_name', 'merchant_created_at', 'merchant_updated_at']
+    @merchants = []
+    @contents.each do |row|
+      merchant_id = row[:id]
+      merchant_name = row[:name]
+      merchant_created_at = row[:created_at]
+      merchant_updated_at = row[:updated_at]
 
+      merchant_data = [merchant_id, merchant_name, merchant_created_at, merchant_updated_at]
+      merchant = Hash[headers.zip(merchant_data)]
+      @merchants.push merchant
+    end
+    return @merchants
+  end
+
+  def random
+    format_merchant_data_into_hash
+    @merchants.sample
+  end
+
+  def find_by_name
+    format_customer_into_hash
+    @customers.each do |attendee|
+      if customer
+        
+      end
+    end
+  end
+
+  def create_customer_object
+    Customer.new(hash)
   end
 end
-
-m = MerchantRepository.new
-m.all
