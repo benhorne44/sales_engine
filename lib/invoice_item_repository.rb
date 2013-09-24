@@ -10,7 +10,7 @@ class InvoiceItemRepository
   end
 
   def format_invoice_item_data_into_hash
-    headers = ['invoice_item_id', 'item_id', 'invoice_id', 'item_quantity', 'unit_price', 'created_at', 'updated_at']
+    headers = ['invoice_item_id', 'item_id', 'invoice_id', 'item_quantity', 'unit_price', 'invoice_item_created_at', 'invoice_item_updated_at']
     @invoice_items = []
     @contents.each do |row|
       invoice_item_id = row[:id]
@@ -18,10 +18,10 @@ class InvoiceItemRepository
       invoice_id = row[:invoice_id]
       item_quantity = row[:quantity]
       unit_price = row[:unit_price]
-      created_at = row[:created_at]
-      updated_at = row[:updated_at]
+      invoice_item_created_at = row[:created_at]
+      invoice_item_updated_at = row[:updated_at]
 
-      invoice_item_data = [invoice_item_id, item_id, invoice_id, item_quantity, unit_price, created_at, updated_at]
+      invoice_item_data = [invoice_item_id, item_id, invoice_id, item_quantity, unit_price, invoice_item_created_at, invoice_item_updated_at]
       invoice_item = Hash[headers.zip(invoice_item_data)]
       @invoice_items.push invoice_item
     end
@@ -82,6 +82,22 @@ class InvoiceItemRepository
 
   def find_all_by_unit_price(input)
     find_all_by("unit_price", input)
+  end
+
+  def find_by_invoice_item_created_at(date)
+    find_by('invoice_item_created_at', date)
+  end
+
+  def find_all_by_invoice_item_created_at(date)
+    find_all_by('invoice_item_created_at', date)
+  end
+
+  def find_by_invoice_item_updated_at(date)
+    find_by('invoice_item_updated_at', date)
+  end
+
+  def find_all_by_invoice_item_updated_at(date)
+    find_all_by('invoice_item_updated_at', date)
   end
 
 end

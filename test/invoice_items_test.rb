@@ -70,5 +70,25 @@ class InvoiceItemRepositoryTest < MiniTest::Test
     response = @ii.find_all_by_unit_price('54368')
     assert_equal 2, response.count
   end
+
+  def test_it_finds_by_invoice_item_created_at
+    response = @ii.find_by_invoice_item_created_at('2012-03-27 14:58:15 UTC')
+    assert_equal 1, response.count
+  end
+
+  def test_it_finds_all_by_invoice_item_created_at
+    response = @ii.find_all_by_invoice_item_created_at('2012-03-27 14:58:15 UTC')
+    assert_equal 4, response.count
+  end
+
+  def test_it_finds_by_invoice_item_updated_at
+    response = @ii.find_by_invoice_item_updated_at('2012-03-27 14:58:15 UTC')
+    assert_equal 1, response.count
+  end
+
+  def test_it_finds_all_by_invoice_item_updated_at
+    response = @ii.find_all_by_invoice_item_updated_at('2012-03-27 14:58:15 UTC')
+    assert_equal 4, response.count
+  end
 end
   
