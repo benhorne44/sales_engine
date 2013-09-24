@@ -3,7 +3,7 @@ class InvoiceItemRepository
 
   def load_file(filename='')
     if filename == ''
-      filename = '../data/invoice_items.csv'
+      filename = './data/invoice_items.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
@@ -33,16 +33,55 @@ class InvoiceItemRepository
     @invoice_items.sample
   end
 
-  # def find_by_name
-  #   format_customer_into_hash
-  #   @customers.each do |attendee|
-  #     if customer
-        
-  #     end
-  #   end
-  # end
+  def find_by(attribute, criteria)
+    format_invoice_item_data_into_hash
+    @results = []
+    @invoice_items.each do |invoice_item|
+      if invoice_item[attribute] == criteria
+      @results.push invoice_item
+      end
+      break
+    end
+    return @results
+  end
 
-  # def create_customer_object
-  #   Customer.new(hash)
-  # end
+  def find_all_by(attribute, criteria)
+    format_invoice_item_data_into_hash
+    @results = []
+    @invoice_items.each do |invoice_item|
+      if invoice_item[attribute] == criteria
+      @results.push invoice_item
+      end
+    end
+    return @results
+  end
+
+  def find_by_item_id(id)
+    find_by("item_id", id)
+  end
+
+  def find_all_by_item_id(id)
+    find_all_by("item_id", id)
+  end
+
+  def find_by_invoice_item_id(id)
+    find_all_by('invoice_item_id', id)
+  end
+
+  def find_all_by_quantity(input)
+    find_all_by('item_quantity', input)
+  end
+
+  def find_by_quantity(input)
+    find_by("item_quantity", input)
+  end
+
+  def find_by_unit_price(input)
+    find_by("unit_price", input)
+  end
+
+  def find_all_by_unit_price(input)
+    find_all_by("unit_price", input)
+  end
+
 end
