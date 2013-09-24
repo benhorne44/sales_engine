@@ -75,6 +75,23 @@ class CustomerRepository
   def find_by_customer_id(id)
     find_all_by("customer_id", id)
   end
+
+  def find_by_customer_created_at(date)
+    find_by('customer_created_at', date)
+  end
+
+  def find_all_by_customer_created_at(date)
+    find_all_by('customer_created_at', date)
+  end
+
+  def find_by_customer_updated_at(date)
+    find_by('customer_updated_at', date)
+  end
+
+  def find_all_by_customer_updated_at(date)
+    find_all_by('customer_updated_at', date)
+  end
+
 end
 
 
