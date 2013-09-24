@@ -40,64 +40,52 @@ class InvoiceItemRepository
       if invoice_item[attribute] == criteria
       @results.push invoice_item
       end
-      break
-    end
-    return @results
-  end
-
-  def find_all_by(attribute, criteria)
-    format_invoice_item_data_into_hash
-    @results = []
-    @invoice_items.each do |invoice_item|
-      if invoice_item[attribute] == criteria
-      @results.push invoice_item
-      end
     end
     return @results
   end
 
   def find_by_item_id(id)
-    find_by("item_id", id)
+    [] << find_by("item_id", id).first
   end
 
   def find_all_by_item_id(id)
-    find_all_by("item_id", id)
+    find_by("item_id", id)
   end
 
   def find_by_invoice_item_id(id)
-    find_all_by('invoice_item_id', id)
+    [] << find_by('invoice_item_id', id).first
   end
 
   def find_all_by_quantity(input)
-    find_all_by('item_quantity', input)
+    find_by('item_quantity', input)
   end
 
   def find_by_quantity(input)
-    find_by("item_quantity", input)
+    [] << find_by("item_quantity", input).first
   end
 
   def find_by_unit_price(input)
-    find_by("unit_price", input)
+    [] << find_by("unit_price", input).first
   end
 
   def find_all_by_unit_price(input)
-    find_all_by("unit_price", input)
+    find_by("unit_price", input)
   end
 
   def find_by_invoice_item_created_at(date)
-    find_by('invoice_item_created_at', date)
+    [] << find_by('invoice_item_created_at', date).first
   end
 
   def find_all_by_invoice_item_created_at(date)
-    find_all_by('invoice_item_created_at', date)
+    find_by('invoice_item_created_at', date)
   end
 
   def find_by_invoice_item_updated_at(date)
-    find_by('invoice_item_updated_at', date)
+    [] << find_by('invoice_item_updated_at', date).first
   end
 
   def find_all_by_invoice_item_updated_at(date)
-    find_all_by('invoice_item_updated_at', date)
+    find_by('invoice_item_updated_at', date)
   end
 
 end

@@ -35,16 +35,59 @@ class InvoiceRepository
     @invoices.sample
   end
 
-  # def find_by_name
-  #   format_invoice_data_into_hash
-  #   @invoices.each do |invoice|
-  #     if invoice
-        
-  #     end
-  #   end
-  # end
+ def find_by(attribute, criteria)
+    format_invoice_data_into_hash
+    @results = []
+    @invoices.each do |invoice|
+      if invoice[attribute] == criteria
+      @results.push invoice
+      end
+    end
+    return @results
+  end
 
-  # def create_customer_object
-  #   Customer.new(hash)
-  # end
+  def find_by_invoice_id(id)
+    [] << find_by("invoice_id", id).first
+  end
+
+  def find_by_customer_id(id)
+    [] << find_by('customer_id', id).first
+  end
+
+   def find_all_by_customer_id(id)
+    find_by('customer_id', id)
+  end
+
+  def find_by_merchant_id(id)
+    [] << find_by('merchant_id', id).first
+  end
+
+  def find_all_by_merchant_id(id)
+    find_by('merchant_id', id)
+  end
+
+  def find_all_by_invoice_status(input)
+    find_by('invoice_status', input)
+  end
+
+  def find_by_invoice_status(input)
+    [] << find_by("invoice_status", input).first
+  end
+
+  def find_by_invoice_created_at(date)
+    [] << find_by('invoice_created_at', date).first
+  end
+
+  def find_all_by_invoice_created_at(date)
+    find_by('invoice_created_at', date)
+  end
+
+  def find_by_invoice_updated_at(date)
+    [] << find_by('invoice_updated_at', date).first
+  end
+
+  def find_all_by_invoice_updated_at(date)
+    find_by('invoice_updated_at', date)
+  end
+
 end
