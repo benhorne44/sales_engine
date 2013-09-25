@@ -1,77 +1,57 @@
 require 'csv'
 class MerchantRepository
-  # def initialize
-  #   load_file
-  # end
+
   def load_file(filename='')
     if filename == ''
-      filename = '../data/merchants.csv'
+      filename = './data/merchants_test.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
   end
 
-  def format_merchant_data_into_hash
-    headers = ['merchant_id', 'merchant_name', 'merchant_created_at', 'merchant_updated_at']
-    @merchants = []
-    @contents.each do |row|
-      merchant_id = row[:id]
-      merchant_name = row[:name]
-      merchant_created_at = row[:created_at]
-      merchant_updated_at = row[:updated_at]
+  def merchants
+    @merchants ||= load_merchants
+  end
 
-      merchant_data = [merchant_id, merchant_name, merchant_created_at, merchant_updated_at]
-      merchant = Hash[headers.zip(merchant_data)]
-      @merchants.push merchant
-      end
-    return @merchants
+  def load_merchants
+    load_file.collect do |row|
+      Merchant.new(row)
+    end
   end
 
   def random
-    format_merchant_data_into_hash
-    @merchants.sample
-  end
-  
-  def find_by(attribute, criteria)
-    format_merchant_data_into_hash
-    @results = []
-    @merchants.each do |merchant|
-      if merchant[attribute].downcase == criteria.downcase
-      @results.push merchant
-      end
-    end
-    return @results
+    merchants.sample
   end
 
   def find_by_merchant_name(name)
-    [] << find_by("merchant_name", name).first
+    merchants.find{|merchant| merchant.name == name} 
   end
 
   def find_all_by_merchant_name(name)
-    find_by("merchant_name", name)
+    merchants.find_all{|merchant| merchant.name == name} 
   end
 
   def find_by_merchant_id(id)
-    [] << find_by("merchant_id", id).first
+    merchants.find{|merchant| merchant.id == id} 
   end
 
   def find_by_merchant_created_at(date)
-    [] << find_by('merchant_created_at', date).first
+    merchants.find{|merchant| merchant.created_at == date}
   end
 
   def find_all_by_merchant_created_at(date)
-    find_by('merchant_created_at', date)
+    merchants.find_all{|merchant| merchant.created_at == date} 
   end
 
   def find_by_merchant_updated_at(date)
-    [] << find_by('merchant_updated_at', date).first
+    merchants.find{|merchant| merchant.updated_at == date} 
   end
 
   def find_all_by_merchant_updated_at(date)
-    find_by('merchant_updated_at', date)
+    merchants.find_all{|merchant| merchant.updated_at == date} 
   end
 
   def all
-    format_merchant_data_into_hash
+    merchants
   end
 end

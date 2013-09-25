@@ -1,13 +1,9 @@
 require 'csv'
 class CustomerRepository
-  
-  # def initialize
-  #   load_file
-  # end
 
   def load_file(filename='')
     if filename == ''
-      filename = './data/customers.csv'
+      filename = './data/customers_test.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
@@ -17,12 +13,12 @@ class CustomerRepository
     @customers ||= load_customers
   end
 
-  def contents
-    @contents ||= load_file
-  end
+  # def contents
+  #   @contents ||= load_file
+  # end
 
   def load_customers
-    contents.collect do |row|
+    load_file.collect do |row|
       Customer.new(row)
     end
   end
@@ -32,7 +28,7 @@ class CustomerRepository
   end
 
   def find_by_first_name(name)
-    customers.find{|c| c.first_name == name }
+    customers.find{|customer| customer.first_name == name }
   end
 
   def find_all_by_first_name(name)
