@@ -19,17 +19,6 @@ class CustomerRepositoryTest < MiniTest::Test
     @cr.load_file('./data/customers_test.csv')
   end
 
-  def test_it_loads_file
-    response = @cr.load_file('./data/customers_test.csv')
-    assert_equal @customer_data, response
-  end
-
-  def test_it_formats_customer_data
-    response = @cr.format_customer_into_hash
-    @expected = {"customer_id"=>"1", "customer_first_name"=>"Joey", "customer_last_name"=>"Ondricka", "customer_created_at"=>"2012-03-27 14:54:09 UTC", "customer_updated_at"=>"2012-03-27 14:54:09 UTC"}, {"customer_id"=>"2", "customer_first_name"=>"Cecelia", "customer_last_name"=>"Osinski", "customer_created_at"=>"2012-03-27 14:54:10 UTC", "customer_updated_at"=>"2012-03-27 14:54:10 UTC"}, {"customer_id"=>"3", "customer_first_name"=>"Mariah", "customer_last_name"=>"Toy", "customer_created_at"=>"2012-03-27 14:54:10 UTC", "customer_updated_at"=>"2012-03-27 14:54:10 UTC"}, {"customer_id"=>"4", "customer_first_name"=>"Joey", "customer_last_name"=>"Ondricka", "customer_created_at"=>"2012-03-27 14:54:09 UTC", "customer_updated_at"=>"2012-03-27 14:54:09 UTC"}
-    assert_equal @expected, response
-  end
-
   def test_it_gives_random_customer
     match = 0
     20.times  do
@@ -85,6 +74,11 @@ class CustomerRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_customer_updated_at
     response = @cr.find_all_by_customer_updated_at('2012-03-27 14:54:09 UTC')
     assert_equal 2, response.count
+  end
+
+  def test_it_finds_by_all
+    response = @cr.all
+    assert_equal 4, response.count    
   end
 end
   

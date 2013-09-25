@@ -90,5 +90,10 @@ class InvoiceItemRepositoryTest < MiniTest::Test
     response = @ii.find_all_by_invoice_item_updated_at('2012-03-27 14:58:15 UTC')
     assert_equal 4, response.count
   end
+
+  def test_it_finds_all_invoice_items
+    response = @ii.all
+    assert_equal 4, response.count
+  end
 end
   

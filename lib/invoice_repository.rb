@@ -90,4 +90,8 @@ class InvoiceRepository
     find_by('invoice_updated_at', date)
   end
 
+  def all
+    format_invoice_data_into_hash
+  end
+
 end

@@ -80,6 +80,10 @@ class CustomerRepository
     find_by('customer_updated_at', date)
   end
 
+  def all
+    format_customer_into_hash
+  end
+
 end
 
 

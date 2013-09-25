@@ -12,7 +12,6 @@ class MerchantRepository
   end
 
   def format_merchant_data_into_hash
-    # load_file
     headers = ['merchant_id', 'merchant_name', 'merchant_created_at', 'merchant_updated_at']
     @merchants = []
     @contents.each do |row|
@@ -32,17 +31,47 @@ class MerchantRepository
     format_merchant_data_into_hash
     @merchants.sample
   end
-
-  def find_by_name
-    format_customer_into_hash
-    @customers.each do |attendee|
-      if customer
-        
+  
+  def find_by(attribute, criteria)
+    format_merchant_data_into_hash
+    @results = []
+    @merchants.each do |merchant|
+      if merchant[attribute].downcase == criteria.downcase
+      @results.push merchant
       end
     end
+    return @results
   end
 
-  def create_customer_object
-    Customer.new(hash)
+  def find_by_merchant_name(name)
+    [] << find_by("merchant_name", name).first
+  end
+
+  def find_all_by_merchant_name(name)
+    find_by("merchant_name", name)
+  end
+
+  def find_by_merchant_id(id)
+    [] << find_by("merchant_id", id).first
+  end
+
+  def find_by_merchant_created_at(date)
+    [] << find_by('merchant_created_at', date).first
+  end
+
+  def find_all_by_merchant_created_at(date)
+    find_by('merchant_created_at', date)
+  end
+
+  def find_by_merchant_updated_at(date)
+    [] << find_by('merchant_updated_at', date).first
+  end
+
+  def find_all_by_merchant_updated_at(date)
+    find_by('merchant_updated_at', date)
+  end
+
+  def all
+    format_merchant_data_into_hash
   end
 end

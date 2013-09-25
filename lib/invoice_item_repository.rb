@@ -27,6 +27,10 @@ class InvoiceItemRepository
     end
     return @invoice_items
   end
+  
+  def all
+    format_invoice_item_data_into_hash
+  end
 
   def random
     format_invoice_item_data_into_hash

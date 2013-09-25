@@ -34,17 +34,70 @@ class ItemRepository
     format_item_data_into_hash
     @items.sample
   end
+  def find_by(attribute, criteria)
+    format_item_data_into_hash
+    @results = []
+    @items.each do |item|
+      if item[attribute].downcase == criteria.downcase
+      @results.push item
+      end
+    end
+    return @results
+  end
 
-  # def find_by_name
-  #   format_customer_into_hash
-  #   @customers.each do |attendee|
-  #     if customer
-        
-  #     end
-  #   end
-  # end
+  def find_by_item_name(name)
+    [] << find_by("item_name", name).first
+  end
 
-  # def create_customer_object
-  #   Customer.new(hash)
-  # end
+  def find_all_by_item_name(name)
+    find_by("item_name", name)
+  end
+
+  def find_by_item_id(id)
+    [] << find_by("item_id", id).first
+  end
+
+  def find_by_item_description(input)
+    [] << find_by("item_description", input).first
+  end
+
+  def find_all_by_item_description(input)
+    find_by("item_description", input)
+  end
+
+  def find_by_unit_price(price)
+    [] << find_by("unit_price", price).first
+  end
+
+  def find_all_by_unit_price(price)
+    find_by("unit_price", price)
+  end
+
+  def find_by_merchant_id(id)
+    [] << find_by("merchant_id", id).first
+  end
+
+  def find_all_by_merchant_id(id)
+    find_by("merchant_id", id)
+  end
+
+  def find_by_item_created_at(date)
+    [] << find_by('item_created_at', date).first
+  end
+
+  def find_all_by_item_created_at(date)
+    find_by('item_created_at', date)
+  end
+
+  def find_by_item_updated_at(date)
+    [] << find_by('item_updated_at', date).first
+  end
+
+  def find_all_by_item_updated_at(date)
+    find_by('item_updated_at', date)
+  end
+
+  def all
+    format_item_data_into_hash
+  end
 end

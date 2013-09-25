@@ -50,7 +50,7 @@ class InvoiceRepositoryTest < MiniTest::Test
     response = @i.find_all_by_merchant_id('53')
     assert_equal 2, response.count
   end
-
+ 
   def test_it_finds_one_by_merchant_id
     response = @i.find_by_merchant_id('53')
     assert_equal 1, response.count
@@ -86,5 +86,9 @@ class InvoiceRepositoryTest < MiniTest::Test
     assert_equal 2, response.count
   end
 
+  def test_it_finds_all
+    response = @i.all
+    assert_equal 4, response.count
+  end
 end
   

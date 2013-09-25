@@ -6,7 +6,7 @@ require_relative '../lib/merchant'
 
 class MerchantTest < MiniTest::Test
   def setup
-    merchant_data = CSV.read'../data/merchants_test.csv', headers: true, header_converters: :symbol
+    merchant_data = CSV.read'./data/merchants_test.csv', headers: true, header_converters: :symbol
     @merchant = Merchant.new
   end
 
@@ -14,34 +14,61 @@ end
 
 class MerchantRepositoryTest < MiniTest::Test
   def setup
-    @merchant_data = CSV.read'../data/merchants_test.csv', headers: true, header_converters: :symbol
-    @m = MerchantRepository.new
+    @merchant_data = CSV.read'./data/merchants_test.csv', headers: true, header_converters: :symbol
+    @mr = MerchantRepository.new
+    @mr.load_file('./data/merchants_test.csv')
   end
 
-  def test_it_loads_file
-    response = @m.load_file('../data/merchants_test.csv')
-    assert_equal @merchant_data, response
+    def test_it_gives_random_merchant
+    match = 0
+    20.times  do
+      response = @mr.random["merchant_id"]
+      expected = @mr.random['merchant_id']
+      if response == expected
+        match += 1
+      end
+    end
+    assert_operator match, :<, 20
   end
 
-  def test_it_formats_merchant_data
-    @m.load_file('../data/merchants_test.csv')
-    response = @m.format_merchant_data_into_hash
-    @expected = {"merchant_id"=>"1", "merchant_name"=>"Schroeder-Jerde", "merchant_created_at"=>"2012-03-27 14:53:59 UTC", "merchant_updated_at"=>"2012-03-27 14:53:59 UTC"}, {"merchant_id"=>"2", "merchant_name"=>"Klein, Rempel and Jones", "merchant_created_at"=>"2012-03-27 14:53:59 UTC", "merchant_updated_at"=>"2012-03-27 14:53:59 UTC"}, {"merchant_id"=>"3", "merchant_name"=>"Willms and Sons", "merchant_created_at"=>"2012-03-27 14:53:59 UTC", "merchant_updated_at"=>"2012-03-27 14:53:59 UTC"}
-    assert_equal @expected, response
+  def test_it_finds_all_by_merchant_name
+    response = @mr.find_all_by_merchant_name('Schroeder-Jerde')
+    assert_equal 2, response.count
   end
 
-  def test_it_gives_random_merchant
-    @m.load_file('../data/merchants_test.csv')
-    response = @m.random["merchant_id"]
-    expected = @m.random['merchant_id']
- 
-    refute_equal response, expected
-    # assert_operator match, :<, 20
+  def test_it_finds_one_by_merchant_name
+    response = @mr.find_by_merchant_name('Schroeder-Jerde')
+    assert_equal 1, response.count
   end
 
-  # def test_it_gives_random_customer
-  #   assert
-  # end
+  def test_it_finds_by_merchant_id
+    response = @mr.find_by_merchant_id('3')
+    assert_equal 1, response.count
+  end
 
+  def test_it_finds_by_merchant_created_at
+    response = @mr.find_by_merchant_created_at('2012-03-27 14:53:59 UTC')
+    assert_equal 1, response.count
+  end
+
+  def test_it_finds_all_by_merchant_created_at
+    response = @mr.find_all_by_merchant_created_at('2012-03-27 14:53:59 UTC')
+    assert_equal 4, response.count
+  end
+
+  def test_it_finds_by_merchant_updated_at
+    response = @mr.find_by_merchant_updated_at('2012-03-27 14:53:59 UTC')
+    assert_equal 1, response.count
+  end
+
+  def test_it_finds_all_by_merchant_updated_at
+    response = @mr.find_all_by_merchant_updated_at('2012-03-27 14:53:59 UTC')
+    assert_equal 4, response.count
+  end
+
+  def test_it_finds_by_all
+    response = @mr.all
+    assert_equal 4, response.count    
+  end
 end
   
