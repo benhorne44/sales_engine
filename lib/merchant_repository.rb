@@ -23,7 +23,7 @@ class MerchantRepository
       merchant_data = [merchant_id, merchant_name, merchant_created_at, merchant_updated_at]
       merchant = Hash[headers.zip(merchant_data)]
       @merchants.push merchant
-    end
+      end
     return @merchants
   end
 

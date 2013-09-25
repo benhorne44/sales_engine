@@ -1,12 +1,13 @@
 require 'csv'
 class InvoiceRepository
-  # def initialize(filename)
-  #   load_file
-  # end
+  def initialize(filename)
+    load_file(filename)
+    format_invoice_data_into_hash
+  end
 
   def load_file(filename='')
     if filename == ''
-      filename = '../data/invoices.csv'
+      filename = './data/invoices.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
@@ -31,12 +32,10 @@ class InvoiceRepository
   end
 
   def random
-    format_invoice_data_into_hash
     @invoices.sample
   end
 
  def find_by(attribute, criteria)
-    format_invoice_data_into_hash
     @results = []
     @invoices.each do |invoice|
       if invoice[attribute] == criteria
@@ -91,7 +90,7 @@ class InvoiceRepository
   end
 
   def all
-    format_invoice_data_into_hash
+    @invoices
   end
 
 end

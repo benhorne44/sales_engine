@@ -1,6 +1,7 @@
 require 'csv'
 require 'minitest'
 require 'minitest/autorun'
+require 'minitest/pride'
 require_relative '../lib/invoice_repository'
 require_relative '../lib/invoice'
 
@@ -9,14 +10,12 @@ class InvoiceTest < MiniTest::Test
     invoice_data = CSV.read'./data/invoices_test.csv', headers: true, header_converters: :symbol
     @invoice = Invoice.new
   end
-
 end
 
 class InvoiceRepositoryTest < MiniTest::Test
   def setup
     @invoice_data = CSV.read'./data/invoices_test.csv', headers: true, header_converters: :symbol
-    @i = InvoiceRepository.new
-    @i.load_file('./data/invoices_test.csv')
+    @i = InvoiceRepository.new('./data/invoices_test.csv')
   end
 
   def test_it_gives_random_invoice_item
