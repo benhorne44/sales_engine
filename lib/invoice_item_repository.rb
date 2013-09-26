@@ -1,95 +1,77 @@
 require 'csv'
+
+
 class InvoiceItemRepository
 
   def load_file(filename='')
     if filename == ''
-      filename = './data/invoice_items.csv'
+      filename = './data/invoice_items_test.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
   end
 
-  def format_invoice_item_data_into_hash
-    headers = ['invoice_item_id', 'item_id', 'invoice_id', 'item_quantity', 'unit_price', 'invoice_item_created_at', 'invoice_item_updated_at']
-    @invoice_items = []
-    @contents.each do |row|
-      invoice_item_id = row[:id]
-      item_id = row[:item_id]
-      invoice_id = row[:invoice_id]
-      item_quantity = row[:quantity]
-      unit_price = row[:unit_price]
-      invoice_item_created_at = row[:created_at]
-      invoice_item_updated_at = row[:updated_at]
+  def invoice_items
+    @invoice_items ||= load_invoice_items
+  end
 
-      invoice_item_data = [invoice_item_id, item_id, invoice_id, item_quantity, unit_price, invoice_item_created_at, invoice_item_updated_at]
-      invoice_item = Hash[headers.zip(invoice_item_data)]
-      @invoice_items.push invoice_item
+  def load_invoice_items
+    load_file.collect do |row|
+      InvoiceItem.new(row)
     end
-    return @invoice_items
   end
   
-  def all
-    format_invoice_item_data_into_hash
-  end
-
   def random
-    format_invoice_item_data_into_hash
-    @invoice_items.sample
-  end
-
-  def find_by(attribute, criteria)
-    format_invoice_item_data_into_hash
-    @results = []
-    @invoice_items.each do |invoice_item|
-      if invoice_item[attribute] == criteria
-      @results.push invoice_item
-      end
-    end
-    return @results
+    invoice_items.sample
   end
 
   def find_by_item_id(id)
-    [] << find_by("item_id", id).first
+    invoice_items.find{|i| i.item_id == id }
   end
 
   def find_all_by_item_id(id)
-    find_by("item_id", id)
+    invoice_items.find_all{|i| i.item_id == id }
   end
 
   def find_by_invoice_item_id(id)
-    [] << find_by('invoice_item_id', id).first
+    invoice_items.find{|i| i.id == id }
   end
 
-  def find_all_by_quantity(input)
-    find_by('item_quantity', input)
+  def find_all_by_quantity(quantity)
+    invoice_items.find_all{|i| i.quantity == quantity }
   end
 
-  def find_by_quantity(input)
-    [] << find_by("item_quantity", input).first
+  def find_by_quantity(quantity)
+    invoice_items.find{|i| i.quantity == quantity }
   end
 
-  def find_by_unit_price(input)
-    [] << find_by("unit_price", input).first
+  def find_by_unit_price(price)
+    invoice_items.find{|i| i.unit_price == price }
   end
 
-  def find_all_by_unit_price(input)
-    find_by("unit_price", input)
+  def find_all_by_unit_price(price)
+    invoice_items.find_all{|i| i.unit_price == price }
   end
 
   def find_by_invoice_item_created_at(date)
-    [] << find_by('invoice_item_created_at', date).first
+    invoice_items.find{|i| i.created_at == date }
   end
 
   def find_all_by_invoice_item_created_at(date)
-    find_by('invoice_item_created_at', date)
+    invoice_items.find_all{|i| i.created_at == date }
   end
 
   def find_by_invoice_item_updated_at(date)
-    [] << find_by('invoice_item_updated_at', date).first
+    invoice_items.find{|i| i.updated_at == date }
   end
 
   def find_all_by_invoice_item_updated_at(date)
-    find_by('invoice_item_updated_at', date)
+    invoice_items.find_all{|i| i.updated_at == date }
   end
+
+  def all
+    invoice_items
+  end
+
 
 end

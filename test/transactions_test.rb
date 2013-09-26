@@ -1,6 +1,7 @@
 require 'csv'
 require 'minitest'
 require 'minitest/autorun'
+require 'minitest/pride'
 require_relative '../lib/transactions_repository'
 require_relative '../lib/transactions'
 

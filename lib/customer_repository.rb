@@ -13,10 +13,6 @@ class CustomerRepository
     @customers ||= load_customers
   end
 
-  # def contents
-  #   @contents ||= load_file
-  # end
-
   def load_customers
     load_file.collect do |row|
       Customer.new(row)

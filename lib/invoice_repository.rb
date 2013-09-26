@@ -1,96 +1,75 @@
 require 'csv'
 class InvoiceRepository
-  def initialize(filename)
-    load_file(filename)
-    format_invoice_data_into_hash
-  end
-
+ 
   def load_file(filename='')
     if filename == ''
-      filename = './data/invoices.csv'
+      filename = './data/invoices_test.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
   end
 
-  def format_invoice_data_into_hash
-    headers = ['invoice_id', 'customer_id', 'merchant_id', 'invoice_status', 'invoice_created_at', 'invoice_updated_at']
-    @invoices = []
-    @contents.each do |row|
-      invoice_id = row[:id]
-      customer_id = row[:customer_id]
-      merchant_id = row[:merchant_id]
-      invoice_status = row[:status]
-      invoice_created_at = row[:created_at]
-      invoice_updated_at = row[:updated_at]
+  def invoices
+    @invoices ||= load_invoices
+  end
 
-      invoice_data = [invoice_id, customer_id, merchant_id, invoice_status, invoice_created_at, invoice_updated_at]
-      invoice = Hash[headers.zip(invoice_data)]
-      @invoices.push invoice
+  def load_invoices
+    load_file.collect do |row|
+      Invoice.new(row)
     end
-    return @invoices
   end
 
   def random
-    @invoices.sample
-  end
-
- def find_by(attribute, criteria)
-    @results = []
-    @invoices.each do |invoice|
-      if invoice[attribute] == criteria
-      @results.push invoice
-      end
-    end
-    return @results
+    invoices.sample
   end
 
   def find_by_invoice_id(id)
-    [] << find_by("invoice_id", id).first
+    invoices.find{|invoice| invoice.id == id}
   end
 
   def find_by_customer_id(id)
-    [] << find_by('customer_id', id).first
+    invoices.find{|invoice| invoice.customer_id == id}
   end
 
    def find_all_by_customer_id(id)
-    find_by('customer_id', id)
+    invoices.find_all{|invoice| invoice.customer_id == id}
   end
 
   def find_by_merchant_id(id)
-    [] << find_by('merchant_id', id).first
+    invoices.find{|invoice| invoice.merchant_id == id}
   end
 
   def find_all_by_merchant_id(id)
-    find_by('merchant_id', id)
+    invoices.find_all{|invoice| invoice.merchant_id == id}
   end
 
-  def find_all_by_invoice_status(input)
-    find_by('invoice_status', input)
+  def find_all_by_invoice_status(status)
+    invoices.find_all{|invoice| invoice.status == status}
   end
 
-  def find_by_invoice_status(input)
-    [] << find_by("invoice_status", input).first
+  def find_by_invoice_status(status)
+    invoices.find{|invoice| invoice.status == status}
   end
 
   def find_by_invoice_created_at(date)
-    [] << find_by('invoice_created_at', date).first
+    invoices.find{|invoice| invoice.created_at == date}
   end
 
   def find_all_by_invoice_created_at(date)
-    find_by('invoice_created_at', date)
+    invoices.find_all{|invoice| invoice.created_at == date}
   end
 
   def find_by_invoice_updated_at(date)
-    [] << find_by('invoice_updated_at', date).first
+    invoices.find{|invoice| invoice.updated_at == date}
   end
 
   def find_all_by_invoice_updated_at(date)
-    find_by('invoice_updated_at', date)
+    invoices.find_all{|invoice| invoice.updated_at == date}
+
   end
 
   def all
-    @invoices
+    invoices
   end
 
 end
