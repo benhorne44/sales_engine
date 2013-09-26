@@ -44,9 +44,7 @@ class InvoiceRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_customer_id
     response = repo.find_all_by_customer_id('1000')
     assert_equal 4, response.count
-    response.each do |invoice|
-      assert_equal '1000', invoice.customer_id
-    end
+    response.each { |invoice| assert_equal '1000', invoice.customer_id }
   end
 
   def test_it_finds_one_by_customer_id
@@ -57,9 +55,7 @@ class InvoiceRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_merchant_id
     response = repo.find_all_by_merchant_id('53')
     assert_equal 2, response.count
-    response.each do |invoice|
-      assert_equal '53', invoice.merchant_id
-    end
+    response.each { |invoice| assert_equal '53', invoice.merchant_id }
   end
  
   def test_it_finds_one_by_merchant_id
@@ -70,9 +66,7 @@ class InvoiceRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_invoice_status
     response = repo.find_all_by_invoice_status('shipped')
     assert_equal 4, response.count
-    response.each do |invoice|
-      assert_equal 'shipped', invoice.status
-    end
+    response.each { |invoice| assert_equal 'shipped', invoice.status }
   end
 
   def test_it_finds_one_by_invoice_status
@@ -88,9 +82,7 @@ class InvoiceRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_invoice_created_at
     response = repo.find_all_by_invoice_created_at('2012-03-27 00:58:15 UTC')
     assert_equal 2, response.count
-    response.each do |invoice|
-      assert_equal '2012-03-27 00:58:15 UTC', invoice.created_at
-    end
+    response.each { |invoice| assert_equal '2012-03-27 00:58:15 UTC', invoice.created_at }
   end
 
   def test_it_finds_by_invoice_updated_at
@@ -101,9 +93,7 @@ class InvoiceRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_invoice_updated_at
     response = repo.find_all_by_invoice_updated_at('2012-03-27 00:58:15 UTC')
     assert_equal 2, response.count
-    response.each do |invoice|
-      assert_equal '2012-03-27 00:58:15 UTC', invoice.updated_at
-    end
+    response.each { |invoice| assert_equal '2012-03-27 00:58:15 UTC', invoice.updated_at }
   end
 
   def test_it_finds_all

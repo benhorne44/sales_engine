@@ -40,9 +40,7 @@ class MerchantRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_merchant_name
     response = repo.find_all_by_merchant_name('Schroeder-Jerde')
     assert_equal 2, response.count
-    response.each do |merchant|
-      assert_equal 'Schroeder-Jerde', merchant.name
-    end
+    response.each { |merchant| assert_equal 'Schroeder-Jerde', merchant.name }
   end
 
   def test_it_finds_one_by_merchant_name
@@ -63,9 +61,7 @@ class MerchantRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_merchant_created_at
     response = repo.find_all_by_merchant_created_at('2012-03-27 14:53:59 UTC')
     assert_equal 4, response.count
-    response.each do |merchant|
-      assert_equal '2012-03-27 14:53:59 UTC', merchant.created_at
-    end
+    response.each { |merchant| assert_equal '2012-03-27 14:53:59 UTC', merchant.created_at }
   end
 
   def test_it_finds_by_merchant_updated_at
@@ -76,9 +72,7 @@ class MerchantRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_merchant_updated_at
     response = repo.find_all_by_merchant_updated_at('2012-03-27 14:53:59 UTC')
     assert_equal 4, response.count
-    response.each do |merchant|
-      assert_equal '2012-03-27 14:53:59 UTC', merchant.updated_at
-    end
+    response.each { |merchant| assert_equal '2012-03-27 14:53:59 UTC', merchant.updated_at }
   end
 
   def test_it_finds_by_all

@@ -14,9 +14,7 @@ class MerchantRepository
   end
 
   def load_merchants
-    load_file.collect do |row|
-      Merchant.new(row)
-    end
+    load_file.collect { |row| Merchant.new(row) }
   end
 
   def random

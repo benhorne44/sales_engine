@@ -39,9 +39,7 @@ class CustomerRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_first_name
     response = repo.find_all_by_first_name('Joey')
     assert_equal 2, response.count
-    response.each do |customer|
-     assert_equal 'Joey', customer.first_name
-    end
+    response.each { |customer| assert_equal 'Joey', customer.first_name }
   end
 
   def test_it_finds_one_by_first_name
@@ -52,9 +50,7 @@ class CustomerRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_last_name
     response = repo.find_all_by_last_name('Ondricka')
     assert_equal 2, response.count
-    response.each do |customer|
-      assert_equal 'Ondricka', customer.last_name
-    end
+    response.each { |customer| assert_equal 'Ondricka', customer.last_name }
   end
 
   def test_it_finds_one_by_last_name
@@ -75,9 +71,7 @@ class CustomerRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_customer_created_at
     response = repo.find_all_by_customer_created_at('2012-03-27 14:54:09 UTC')
     assert_equal 2, response.count
-    response.each do |customer|
-      assert_equal '2012-03-27 14:54:09 UTC', customer.created_at
-    end
+    response.each { |customer| assert_equal '2012-03-27 14:54:09 UTC', customer.created_at }
   end
 
   def test_it_finds_by_customer_updated_at
@@ -88,9 +82,7 @@ class CustomerRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_customer_updated_at
     response = repo.find_all_by_customer_updated_at('2012-03-27 14:54:09 UTC')
     assert_equal 2, response.count
-    response.each do |customer|
-      assert_equal '2012-03-27 14:54:09 UTC', customer.updated_at
-    end
+    response.each { |customer| assert_equal '2012-03-27 14:54:09 UTC', customer.updated_at }
   end
 
   def test_it_finds_by_all

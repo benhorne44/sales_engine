@@ -40,9 +40,7 @@ class InvoiceItemRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_item_id
     response = repo.find_all_by_item_id('2055')
     assert_equal 2, response.count
-    response.each do |invoice_item|
-      assert_equal '2055', invoice_item.item_id
-    end
+    response.each { |invoice_item| assert_equal '2055', invoice_item.item_id }
   end
 
   def test_it_finds_one_by_item_id
@@ -58,9 +56,7 @@ class InvoiceItemRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_quantity
     response = repo.find_all_by_quantity('3')
     assert_equal 2, response.count
-    response.each do |invoice_item|
-      assert_equal '3', invoice_item.quantity
-    end
+    response.each { |invoice_item| assert_equal '3', invoice_item.quantity }
   end
 
   def test_it_finds_by_quantity
@@ -76,9 +72,7 @@ class InvoiceItemRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_unit_price
     response = repo.find_all_by_unit_price('54368')
     assert_equal 2, response.count
-    response.each do |invoice_item|
-      assert_equal '54368', invoice_item.unit_price
-    end
+    response.each { |invoice_item| assert_equal '54368', invoice_item.unit_price }
   end
 
   def test_it_finds_by_invoice_item_created_at
@@ -89,9 +83,7 @@ class InvoiceItemRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_invoice_item_created_at
     response = repo.find_all_by_invoice_item_created_at('2012-03-27 14:58:15 UTC')
     assert_equal 4, response.count
-    response.each do |invoice_item|
-      assert_equal '2012-03-27 14:58:15 UTC', invoice_item.created_at
-    end
+    response.each { |invoice_item| assert_equal '2012-03-27 14:58:15 UTC', invoice_item.created_at }
   end
 
   def test_it_finds_by_invoice_item_updated_at
@@ -102,9 +94,7 @@ class InvoiceItemRepositoryTest < MiniTest::Test
   def test_it_finds_all_by_invoice_item_updated_at
     response = repo.find_all_by_invoice_item_updated_at('2012-03-27 14:58:15 UTC')
     assert_equal 4, response.count
-    response.each do |invoice_item|
-      assert_equal '2012-03-27 14:58:15 UTC', invoice_item.updated_at
-    end
+    response.each { |invoice_item| assert_equal '2012-03-27 14:58:15 UTC', invoice_item.updated_at }
   end
 
   def test_it_finds_all_invoice_items

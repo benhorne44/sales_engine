@@ -14,9 +14,7 @@ class InvoiceRepository
   end
 
   def load_invoices
-    load_file.collect do |row|
-      Invoice.new(row)
-    end
+    load_file.collect { |row| Invoice.new(row) }
   end
 
   def random

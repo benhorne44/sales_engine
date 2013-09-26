@@ -5,101 +5,77 @@ class TransactionRepository
 
   def load_file(filename='')
     if filename == ''
-      filename = '../data/transactions.csv'
+      filename = './data/transactions_test.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
   end
 
-  def format_transaction_data_into_hash
-    headers = ['transaction_id', 'invoice_id', 'credit_card_number', 'credit_card_expiration_date', 'transaction_result', 'transaction_created_at', 'transaction_updated_at']
-    @transactions = []
-    @contents.each do |row|
-      transaction_id = row[:id]
-      credit_card_number = row[:credit_card_number]
-      credit_card_expiration_date = row[:credit_card_expiration_date]
-      transaction_result = row[:result]
-      invoice_id = row[:invoice_id]
-      transaction_created_at = row[:created_at]
-      transaction_updated_at = row[:updated_at]
+  def transactions
+    @transactions ||= load_transactions
+  end
 
-
-      transaction_data = [transaction_id, invoice_id, credit_card_number, credit_card_expiration_date, transaction_result, transaction_created_at, transaction_updated_at]
-      transaction = Hash[headers.zip(transaction_data)]
-      @transactions.push transaction
-    end
-    return @transactions
+  def load_transactions
+    load_file.collect { |row| Transaction.new(row) }
   end
 
   def random
-    format_transaction_data_into_hash
-    @transactions.sample
-  end
-
-  def find_by(attribute, criteria)
-    format_transaction_data_into_hash
-    @results = []
-    @transactions.each do |transaction|
-      if transaction[attribute].downcase == criteria.downcase
-      @results.push transaction
-      end
-    end
-    return @results
+    transactions.sample
   end
 
   def find_by_transaction_id(id)
-    [] << find_by("transaction_id", id).first
+    transactions.find{|t| t.id == id }
   end
 
   def find_by_invoice_id(id)
-    [] << find_by("invoice_id", id).first
+    transactions.find{|t| t.invoice_id == id }
   end
 
   def find_all_by_invoice_id(id)
-    find_by("invoice_id", id)
+    transactions.find_all{|t| t.invoice_id == id }
   end
 
   def find_by_credit_card_number(number)
-    [] << find_by("credit_card_number", number).first
+    transactions.find{|t| t.credit_card_number == number }
   end
 
   def find_all_by_credit_card_number(number)
-    find_by("credit_card_number", number)
+    transactions.find_all{|t| t.credit_card_number == number }
   end
 
-  # def find_by_credit_card_expiration_date(date)
-  #   [] << find_by("credit_card_expiration_date", date).first
-  # end
+  def find_by_credit_card_expiration_date(date)
+    [] << find_by("credit_card_expiration_date", date).first
+  end
 
-  # def find_all_by_credit_card_expiration_date(date)
-  #   find_by("credit_card_expiration_date", date)
-  # end
+  def find_all_by_credit_card_expiration_date(date)
+    find_by("credit_card_expiration_date", date)
+  end
 
   def find_by_transaction_result(result)
-    [] << find_by("transaction_result", result).first
+    transactions.find{|t| t.result == result }
   end
 
   def find_all_by_transaction_result(result)
-    find_by("transaction_result", result)
+    transactions.find_all{|t| t.result == result }
   end
 
   def find_by_transaction_created_at(date)
-    [] << find_by('transaction_created_at', date).first
+    transactions.find{|t| t.created_at == date }
   end
 
   def find_all_by_transaction_created_at(date)
-    find_by('transaction_created_at', date)
+    transactions.find_all{|t| t.created_at == date }
   end
 
   def find_by_transaction_updated_at(date)
-    [] << find_by('transaction_updated_at', date).first
+    transactions.find{|t| t.updated_at == date }
   end
 
   def find_all_by_transaction_updated_at(date)
-    find_by('transaction_updated_at', date)
+    transactions.find_all{|t| t.updated_at == date }
   end
 
   def all
-    format_transaction_data_into_hash
+    transactions
   end
 end

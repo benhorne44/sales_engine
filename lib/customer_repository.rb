@@ -14,9 +14,7 @@ class CustomerRepository
   end
 
   def load_customers
-    load_file.collect do |row|
-      Customer.new(row)
-    end
+    load_file.collect { |row| Customer.new(row) }
   end
 
   def random
