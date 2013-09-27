@@ -4,113 +4,43 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/item_repository'
 require_relative '../lib/item'
+require_relative '../lib/merchant_repository'
+require_relative '../lib/merchant'
+require_relative '../lib/invoice_repository'
+require_relative '../lib/invoice'
 
 class ItemTest < MiniTest::Test
-  def setup
-    item_data = CSV.read'./data/items_test.csv', headers: true, header_converters: :symbol
-    @item = Item.new
-  end
-
-end
-
-class ItemRepositoryTest < MiniTest::Test
-  
-  def repo
-    @repo ||= load_data
-  end
 
   def load_data
     i = ItemRepository.new
-    i.load_file('./data/items_test.csv')
-    return i
+    contents = i.load_file('./data/items_test.csv')
+    return contents
   end
 
-  def test_it_gives_random_customer
-    match = 0
-    20.times  do
-      response = repo.random
-      expected = repo.random
-      if response == expected
-        match += 1
+  def create_specific_item_with_id(id)
+    items = load_data.collect {|row| Item.new(row) }
+    items.each do |item|
+      if item.id == id
+        @item = item
       end
     end
-    assert_operator match, :<, 20
+    return @item
   end
 
-  def test_it_finds_all_by_item_name
-    response = repo.find_all_by_item_name('Item Sit Esse')
-    assert_equal 2, response.count
-    response.each { |item| assert_equal 'Item Sit Esse', item.name }
+  def test_it_finds_an_invoice_item_associated_with_a_specific_item
+    create_specific_item_with_id('2484')
+    response = @item.invoice_items
+    assert_equal 1, response.count
+    response.each do |invoice_item| 
+      assert_equal '2484', invoice_item.item_id
+      assert_equal InvoiceItem, invoice_item.class
+    end
   end
 
-  def test_it_finds_one_by_item_name
-    response = repo.find_by_item_name('Item Sit Esse')
-    assert_equal 'Item Sit Esse', response.name
-  end
-
-  def test_it_finds_by_item_id
-    response = repo.find_by_item_id('2481')
-    assert_equal '2481', response.id
-  end
-
-  def test_it_finds_all_by_item_description
-    response = repo.find_all_by_item_description('Natus soluta qui consequatur repellat beatae aspernatur. Qui fuga sed velit. Vitae rerum suscipit quidem sed unde.')
-    assert_equal 2, response.count
-    response.each { |item| assert_equal 'Natus soluta qui consequatur repellat beatae aspernatur. Qui fuga sed velit. Vitae rerum suscipit quidem sed unde.', item.description }
-  end
-
-  def test_it_finds_one_by_item_description
-    response = repo.find_by_item_description('Natus soluta qui consequatur repellat beatae aspernatur. Qui fuga sed velit. Vitae rerum suscipit quidem sed unde.')
-    assert_equal 'Natus soluta qui consequatur repellat beatae aspernatur. Qui fuga sed velit. Vitae rerum suscipit quidem sed unde.', response.description
-  end
-
-  def test_it_finds_all_by_unit_price
-    response = repo.find_all_by_unit_price('92637')
-    assert_equal 2, response.count
-    response.each { |item| assert_equal '92637', item.unit_price }
-  end
-
-  def test_it_finds_one_by_unit_price
-    response = repo.find_by_unit_price('92637')
-    assert_equal '92637', response.unit_price
-  end
-
-  def test_it_finds_all_by_merchant_id
-    response = repo.find_all_by_merchant_id('100')
-    assert_equal 4, response.count
-    response.each { |item| assert_equal '100', item.merchant_id }
-  end
-
-  def test_it_finds_one_by_merchant_id
-    response = repo.find_by_merchant_id('100')
-    assert_equal '100', response.merchant_id
-  end
-
-  def test_it_finds_by_item_created_at
-    response = repo.find_by_item_created_at('2012-03-27 14:54:09 UTC')
-    assert_equal '2012-03-27 14:54:09 UTC', response.created_at
-  end
-
-  def test_it_finds_all_by_item_created_at
-    response = repo.find_all_by_item_created_at('2012-03-27 14:54:09 UTC')
-    assert_equal 4, response.count
-    response.each { |item| assert_equal '2012-03-27 14:54:09 UTC', item.created_at }
-  end
-
-  def test_it_finds_by_item_updated_at
-    response = repo.find_by_item_updated_at('2012-03-27 14:54:09 UTC')
-    assert_equal '2012-03-27 14:54:09 UTC', response.updated_at
-  end
-
-  def test_it_finds_all_by_item_updated_at
-    response = repo.find_all_by_item_updated_at('2012-03-27 14:54:09 UTC')
-    assert_equal 4, response.count
-    response.each { |item| assert_equal '2012-03-27 14:54:09 UTC', item.updated_at }
-  end
-
-  def test_it_finds_by_all
-    response = repo.all
-    assert_equal 4, response.count    
+  def test_it_finds_a_merchant_associated_with_a_specific_item
+    create_specific_item_with_id('2484')
+    response = @item.merchant
+    assert_equal Merchant, response.class
+    assert_equal '100', response.id
   end
 end
-  

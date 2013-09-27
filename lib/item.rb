@@ -40,4 +40,21 @@ class Item
     @updated_at
   end
 
+  def merchant_repo
+    @merchant_repo ||= MerchantRepository.new
+  end
+
+  def invoice_item_repo
+    @invoice_item_repo ||= InvoiceItemRepository.new
+  end
+
+  def merchant
+    merchant_repo.find_by_merchant_id(@merchant_id)
+  end
+
+  def invoice_items
+    invoice_item_repo.find_all_by_item_id(@id)
+  end
+
+
 end

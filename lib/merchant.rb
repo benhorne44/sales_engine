@@ -24,4 +24,21 @@ class Merchant
     @updated_at
   end
 
+  def item_repo
+    @item_repo ||= ItemRepository.new
+  end
+
+  def invoice_repo
+    @invoice_repo ||= InvoiceRepository.new
+  end
+
+  def items
+    item_repo.find_all_by_merchant_id(@id)
+  end
+
+  def invoices
+    invoice_repo.find_all_by_merchant_id(@id)
+  end
+
+
 end

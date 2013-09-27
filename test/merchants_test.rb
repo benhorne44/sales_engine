@@ -4,81 +4,41 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/merchant_repository'
 require_relative '../lib/merchant'
+require_relative '../lib/item_repository'
+require_relative '../lib/item'
+require_relative '../lib/invoice_repository'
+require_relative '../lib/invoice'
 
 class MerchantTest < MiniTest::Test
-  def setup
-    merchant_data = CSV.read'./data/merchants_test.csv', headers: true, header_converters: :symbol
-    @merchant = Merchant.new
-  end
-
-end
-
-class MerchantRepositoryTest < MiniTest::Test
-  
-  def repo
-    @repo ||= load_data
-  end
 
   def load_data
     mr = MerchantRepository.new
-    mr.load_file('./data/merchants_test.csv')
-    return mr
+    contents = mr.load_file('./data/merchants_test.csv')
+    return contents
   end
 
-  def test_it_gives_random_merchant
-    match = 0
-    20.times  do
-      response = repo.random
-      expected = repo.random
-      if response == expected
-        match += 1
+  def create_specific_merchant_with_id(id)
+    merchants = load_data.collect {|row| Merchant.new(row) }
+    merchants.each do |merchant|
+      if merchant.id == id
+        @merchant = merchant
       end
     end
-    assert_operator match, :<, 20
+    return @merchant
   end
 
-  def test_it_finds_all_by_merchant_name
-    response = repo.find_all_by_merchant_name('Schroeder-Jerde')
-    assert_equal 2, response.count
-    response.each { |merchant| assert_equal 'Schroeder-Jerde', merchant.name }
-  end
-
-  def test_it_finds_one_by_merchant_name
-    response = repo.find_by_merchant_name('Schroeder-Jerde')
-    assert_equal 'Schroeder-Jerde', response.name
-  end
-
-  def test_it_finds_by_merchant_id
-    response = repo.find_by_merchant_id('3')
-    assert_equal '3', response.id
-  end
-
-  def test_it_finds_by_merchant_created_at
-    response = repo.find_by_merchant_created_at('2012-03-27 14:53:59 UTC')
-    assert_equal '2012-03-27 14:53:59 UTC', response.created_at
-  end
-
-  def test_it_finds_all_by_merchant_created_at
-    response = repo.find_all_by_merchant_created_at('2012-03-27 14:53:59 UTC')
+  def test_it_finds_all_items_associated_with_specific_merchant
+    create_specific_merchant_with_id('100')
+    response = @merchant.items
     assert_equal 4, response.count
-    response.each { |merchant| assert_equal '2012-03-27 14:53:59 UTC', merchant.created_at }
+    response.each { |item| assert_equal '100', item.merchant_id }
   end
 
-  def test_it_finds_by_merchant_updated_at
-    response = repo.find_by_merchant_updated_at('2012-03-27 14:53:59 UTC')
-    assert_equal '2012-03-27 14:53:59 UTC', response.updated_at
-  end
-
-  def test_it_finds_all_by_merchant_updated_at
-    response = repo.find_all_by_merchant_updated_at('2012-03-27 14:53:59 UTC')
-    assert_equal 4, response.count
-    response.each { |merchant| assert_equal '2012-03-27 14:53:59 UTC', merchant.updated_at }
-  end
-
-  def test_it_finds_by_all
-    response = repo.all
-    assert_equal 4, response.count    
+  def test_it_finds_all_invoices_associated_with_specific_merchant
+    create_specific_merchant_with_id('8')
+    response = @merchant.invoices
+    assert_equal 1, response.count
+    response.each { |invoice| assert_equal '8', invoice.merchant_id }
   end
 
 end
-  

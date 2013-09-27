@@ -99,7 +99,7 @@ class InvoiceItemRepositoryTest < MiniTest::Test
 
   def test_it_finds_all_invoice_items
     response = repo.all
-    assert_equal 4, response.count
+    assert_equal 5, response.count
   end
 
 end

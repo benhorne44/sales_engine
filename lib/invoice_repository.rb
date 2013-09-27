@@ -1,6 +1,6 @@
 require 'csv'
 class InvoiceRepository
- 
+  
   def load_file(filename='')
     if filename == ''
       filename = './data/invoices_test.csv'
@@ -29,7 +29,7 @@ class InvoiceRepository
     invoices.find{|invoice| invoice.customer_id == id}
   end
 
-   def find_all_by_customer_id(id)
+  def find_all_by_customer_id(id)
     invoices.find_all{|invoice| invoice.customer_id == id}
   end
 
