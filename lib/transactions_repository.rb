@@ -3,9 +3,15 @@ require 'csv'
 
 class TransactionRepository
 
+  attr_reader :engine
+
+  def initialize(engine)
+    @engine = engine
+  end
+
   def load_file(filename='')
     if filename == ''
-      filename = './data/transactions_test.csv'
+      filename = './data/transactions.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
@@ -16,7 +22,7 @@ class TransactionRepository
   end
 
   def load_transactions
-    load_file.collect { |row| Transaction.new(row) }
+    load_file.collect { |row| Transaction.new(row, engine) }
   end
 
   def random
@@ -44,11 +50,11 @@ class TransactionRepository
   end
 
   def find_by_credit_card_expiration_date(date)
-    [] << find_by("credit_card_expiration_date", date).first
+    transactions.find{|t| t.credit_card_expiration_date == date }
   end
 
   def find_all_by_credit_card_expiration_date(date)
-    find_by("credit_card_expiration_date", date)
+    transactions.find_all{|t| t.credit_card_expiration_date == date }
   end
 
   def find_by_transaction_result(result)

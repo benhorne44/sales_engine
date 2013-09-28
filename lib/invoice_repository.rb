@@ -1,9 +1,15 @@
 require 'csv'
 class InvoiceRepository
+
+  attr_reader :engine
+
+  def initialize(engine)
+    @engine = engine
+  end
   
   def load_file(filename='')
     if filename == ''
-      filename = './data/invoices_test.csv'
+      filename = './data/invoices.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
@@ -14,7 +20,7 @@ class InvoiceRepository
   end
 
   def load_invoices
-    load_file.collect { |row| Invoice.new(row) }
+    load_file.collect { |row| Invoice.new(row, engine) }
   end
 
   def random

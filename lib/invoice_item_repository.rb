@@ -3,9 +3,15 @@ require 'csv'
 
 class InvoiceItemRepository
 
+  attr_reader :engine
+
+  def initialize(engine)
+    @engine = engine
+  end
+
   def load_file(filename='')
     if filename == ''
-      filename = './data/invoice_items_test.csv'
+      filename = './data/invoice_items.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
@@ -16,7 +22,7 @@ class InvoiceItemRepository
   end
 
   def load_invoice_items
-    load_file.collect { |row| InvoiceItem.new(row) }
+    load_file.collect { |row| InvoiceItem.new(row, engine) }
   end
   
   def random
@@ -29,6 +35,10 @@ class InvoiceItemRepository
 
   def find_all_by_item_id(id)
     invoice_items.find_all{|i| i.item_id == id }
+  end
+
+  def find_all_by_invoice_id(id)
+    invoice_items.find_all{|i| i.invoice_id == id }
   end
 
   def find_by_invoice_item_id(id)

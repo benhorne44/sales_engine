@@ -1,9 +1,15 @@
 require 'csv'
 class MerchantRepository
 
+  attr_reader :engine
+
+  def initialize(engine)
+    @engine = engine
+  end
+
   def load_file(filename='')
     if filename == ''
-      filename = './data/merchants_test.csv'
+      filename = './data/merchants.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
@@ -14,7 +20,7 @@ class MerchantRepository
   end
 
   def load_merchants
-    load_file.collect { |row| Merchant.new(row) }
+    load_file.collect { |row| Merchant.new(row, engine) }
   end
 
   def random
@@ -52,4 +58,5 @@ class MerchantRepository
   def all
     merchants
   end
+
 end

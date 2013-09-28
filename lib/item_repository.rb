@@ -2,9 +2,16 @@ require 'csv'
 
 class ItemRepository
 
+  attr_reader :engine
+
+  def initialize(engine)
+    @engine = engine
+  end
+
+
   def load_file(filename='')
     if filename == ''
-      filename = './data/items_test.csv'
+      filename = './data/items.csv'
     end
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
@@ -15,7 +22,7 @@ class ItemRepository
   end
 
   def load_items
-    load_file.collect { |row| Item.new(row) }
+    load_file.collect { |row| Item.new(row, engine) }
   end
 
   def random
