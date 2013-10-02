@@ -3,11 +3,11 @@ class Transaction
 
 
   def initialize(input, engine)
-    @id = input[:id]
-    @credit_card_number = input[:credit_card_number]
+    @id = input[:id].to_i
+    @credit_card_number = input[:credit_card_number].to_i
     @credit_card_expiration_date = input[:credit_card_expiration_date]
     @result = input[:result]
-    @invoice_id = input[:invoice_id]
+    @invoice_id = input[:invoice_id].to_i
     @created_at = input[:created_at]
     @updated_at = input[:updated_at]
     @engine = engine
@@ -18,7 +18,13 @@ class Transaction
   end
 
   def invoice
-    invoice_repo.find_by_invoice_id(invoice_id)
+    invoice_repo.find_by_id(invoice_id)
   end
+
+  def successful?
+    transaction.result == 'success'
+  end
+
+
 
 end

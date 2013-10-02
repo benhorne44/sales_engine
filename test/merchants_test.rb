@@ -8,37 +8,22 @@ require_relative '../lib/item_repository'
 require_relative '../lib/item'
 require_relative '../lib/invoice_repository'
 require_relative '../lib/invoice'
+require_relative '../lib/customer_repository'
+require_relative '../lib/customer'
+require_relative '../lib/sales_engine'
 
 class MerchantTest < MiniTest::Test
 
-  def load_data
-    mr = MerchantRepository.new
-    contents = mr.load_file('./data/merchants_test.csv')
-    return contents
-  end
+ def setup
+  @engine ||= SalesEngine.new
+  @engine.merchant_repository.load_file('./data/merchants_test.csv')
+  @merchant = @engine.merchant_repository.find_by_id(1)
+ end
 
-  def create_specific_merchant_with_id(id)
-    merchants = load_data.collect {|row| Merchant.new(row) }
-    merchants.each do |merchant|
-      if merchant.id == id
-        @merchant = merchant
-      end
-    end
-    return @merchant
-  end
+ def test_it_finds_favorite_customer
+  # result = @merchant.favorite_customer
 
-  def test_it_finds_all_items_associated_with_specific_merchant
-    create_specific_merchant_with_id('100')
-    response = @merchant.items
-    assert_equal 4, response.count
-    response.each { |item| assert_equal '100', item.merchant_id }
-  end
-
-  def test_it_finds_all_invoices_associated_with_specific_merchant
-    create_specific_merchant_with_id('8')
-    response = @merchant.invoices
-    assert_equal 1, response.count
-    response.each { |invoice| assert_equal '8', invoice.merchant_id }
-  end
-
+  assert_equal '2', @merchant
+   
+ end
 end

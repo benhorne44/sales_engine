@@ -7,10 +7,7 @@ class InvoiceRepository
     @engine = engine
   end
   
-  def load_file(filename='')
-    if filename == ''
-      filename = './data/invoices.csv'
-    end
+  def load_file(filename)
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
   end
@@ -20,14 +17,14 @@ class InvoiceRepository
   end
 
   def load_invoices
-    load_file.collect { |row| Invoice.new(row, engine) }
+    @contents.collect { |row| Invoice.new(row, engine) }
   end
 
   def random
     invoices.sample
   end
 
-  def find_by_invoice_id(id)
+  def find_by_id(id)
     invoices.find{|invoice| invoice.id == id}
   end
 
@@ -47,11 +44,11 @@ class InvoiceRepository
     invoices.find_all{|invoice| invoice.merchant_id == id}
   end
 
-  def find_all_by_invoice_status(status)
+  def find_all_by_status(status)
     invoices.find_all{|invoice| invoice.status == status}
   end
 
-  def find_by_invoice_status(status)
+  def find_by_status(status)
     invoices.find{|invoice| invoice.status == status}
   end
 
@@ -75,5 +72,17 @@ class InvoiceRepository
   def all
     invoices
   end
+
+  # def create(hash)
+  #     customer = hash[customer]
+  #     merchant = hash[merchant]
+  #     items = hash[items]
+  #   # hash = customer_data, merchant_data, status_data, items_data
+  #   # :customer_id = hash[customer].id
+    
+  #   invoice = {:id => , :customer_id => customer.id, :merchant_id => merchant.id}
+
+  #   invoices.push()
+  # end
 
 end

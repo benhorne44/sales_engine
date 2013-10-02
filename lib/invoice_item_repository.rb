@@ -9,10 +9,7 @@ class InvoiceItemRepository
     @engine = engine
   end
 
-  def load_file(filename='')
-    if filename == ''
-      filename = './data/invoice_items.csv'
-    end
+  def load_file(filename)
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
     return @contents
   end
@@ -22,7 +19,7 @@ class InvoiceItemRepository
   end
 
   def load_invoice_items
-    load_file.collect { |row| InvoiceItem.new(row, engine) }
+    @contents.collect { |row| InvoiceItem.new(row, engine) }
   end
   
   def random
@@ -41,7 +38,7 @@ class InvoiceItemRepository
     invoice_items.find_all{|i| i.invoice_id == id }
   end
 
-  def find_by_invoice_item_id(id)
+  def find_by_id(id)
     invoice_items.find{|i| i.id == id }
   end
 
@@ -54,7 +51,8 @@ class InvoiceItemRepository
   end
 
   def find_by_unit_price(price)
-    invoice_items.find{|i| i.unit_price == price }
+    price_in_cents = price*100
+    invoice_items.find{|i| i.unit_price == price_in_cents.to_i }
   end
 
   def find_all_by_unit_price(price)

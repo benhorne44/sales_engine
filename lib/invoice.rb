@@ -2,9 +2,9 @@ class Invoice
   attr_reader :id, :customer_id, :merchant_id, :status, :created_at, :updated_at, :engine
 
   def initialize(input, engine)
-    @id = input[:id]
-    @customer_id = input[:customer_id]
-    @merchant_id = input[:merchant_id]
+    @id = input[:id].to_i
+    @customer_id = input[:customer_id].to_i
+    @merchant_id = input[:merchant_id].to_i
     @status = input[:status]
     @created_at = input[:created_at]
     @updated_at = input[:updated_at]
@@ -17,6 +17,16 @@ class Invoice
 
   def transactions
     transactions_repo.find_all_by_invoice_id(id)
+  end
+
+  def successful?
+    transactions.any? { |transaction| transaction.result == 'success' }
+  end
+
+  def total
+    @total ||= invoice_items.collect do |invoice_item|
+      invoice_item.quantity * invoice_item.unit_price
+    end.reduce(0, :+)
   end
 
   def invoice_item_repo
@@ -36,7 +46,7 @@ class Invoice
   end
 
   def customer
-    customers_repo.find_by_customer_id(customer_id)
+    customers_repo.find_by_id(customer_id)
   end
 
   def merchant_repo
@@ -44,7 +54,7 @@ class Invoice
   end
 
   def merchant
-    merchant_repo.find_by_merchant_id(merchant_id)
+    merchant_repo.find_by_id(merchant_id)
   end
 
 end

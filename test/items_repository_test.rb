@@ -4,18 +4,18 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require_relative '../lib/item_repository'
 require_relative '../lib/item'
+require_relative '../lib/sales_engine'
 
 
 class ItemRepositoryTest < MiniTest::Test
   
-  def repo
-    @repo ||= load_data
+  def setup
+    @engine ||= SalesEngine.new
+    @engine.item_repository.load_file('./data/items_test.csv')
   end
 
-  def load_data
-    i = ItemRepository.new
-    i.load_file('./data/items_test.csv')
-    return i
+  def repo
+    @engine.item_repository 
   end
 
   def test_it_gives_random_customer

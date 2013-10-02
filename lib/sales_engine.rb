@@ -11,18 +11,21 @@ require_relative 'invoice_item'
 require_relative 'invoice_item_repository'
 require_relative 'transactions'
 require_relative 'transactions_repository'
+### optional
+require_relative 'revenue'
 
 class SalesEngine
 
-  attr_reader :merchant_repository, :item_repository, :invoice_repository, :invoice_item_repository, :customer_repository, :transactions_repository
+  attr_accessor :merchant_repository, :item_repository, :invoice_repository, :invoice_item_repository, :customer_repository, :transactions_repository
 
-  def initialize
+  def initialize(dir = nil)
     @merchant_repository     = MerchantRepository.new(self)
     @item_repository         = ItemRepository.new(self)
     @invoice_repository      = InvoiceRepository.new(self)
     @invoice_item_repository = InvoiceItemRepository.new(self)
     @customer_repository     = CustomerRepository.new(self)
     @transactions_repository = TransactionRepository.new(self)
+    startup
   end
 
   def startup
@@ -32,7 +35,6 @@ class SalesEngine
     customer_repository.load_file('./data/customers.csv')
     transactions_repository.load_file('./data/transactions.csv')
     invoice_item_repository.load_file('./data/invoice_items.csv')
-    # Loads a specified file for each of the repo classes
   end
 
   def find
@@ -41,4 +43,5 @@ class SalesEngine
 
 end
 
-engine = SalesEngine.new
+# engine = SalesEngine.new
+# engine.startup

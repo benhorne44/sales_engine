@@ -7,12 +7,8 @@ class CustomerRepository
     @engine = engine
   end
 
-  def load_file(filename='')
-    if filename == ''
-      filename = './data/customers.csv'
-    end
+  def load_file(filename)
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
-    return @contents
   end
 
   def customers
@@ -20,7 +16,7 @@ class CustomerRepository
   end
 
   def load_customers
-    load_file.collect { |row| Customer.new(row, engine) }
+    @contents.collect { |row| Customer.new(row, engine) }
   end
 
   def random
@@ -43,23 +39,23 @@ class CustomerRepository
     customers.find_all{|c| c.last_name == name }
   end
 
-  def find_by_customer_id(id)
+  def find_by_id(id)
     customers.find{|c| c.id == id }
   end
 
-  def find_by_customer_created_at(date)
+  def find_by_created_at(date)
     customers.find{|c| c.created_at == date }
   end
 
-  def find_all_by_customer_created_at(date)
+  def find_all_by_created_at(date)
     customers.find_all{|c| c.created_at == date }
   end
 
-  def find_by_customer_updated_at(date)
+  def find_by_updated_at(date)
     customers.find{|c| c.updated_at == date }
   end
 
-  def find_all_by_customer_updated_at(date)
+  def find_all_by_updated_at(date)
     customers.find_all{|c| c.updated_at == date }
   end
 

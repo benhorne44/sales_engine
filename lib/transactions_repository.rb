@@ -9,12 +9,8 @@ class TransactionRepository
     @engine = engine
   end
 
-  def load_file(filename='')
-    if filename == ''
-      filename = './data/transactions.csv'
-    end
+  def load_file(filename)
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
-    return @contents
   end
 
   def transactions
@@ -22,14 +18,14 @@ class TransactionRepository
   end
 
   def load_transactions
-    load_file.collect { |row| Transaction.new(row, engine) }
+    @contents.collect { |row| Transaction.new(row, engine) }
   end
 
   def random
     transactions.sample
   end
 
-  def find_by_transaction_id(id)
+  def find_by_id(id)
     transactions.find{|t| t.id == id }
   end
 
