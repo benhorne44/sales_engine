@@ -30,20 +30,20 @@ class ItemRepositoryTest < MiniTest::Test
     assert_operator match, :<, 20
   end
 
-  def test_it_finds_all_by_item_name
-    response = repo.find_all_by_item_name('Item Sit Esse')
+  def test_it_finds_all_by_name
+    response = repo.find_all_by_name('Item Sit Esse')
     assert_equal 2, response.count
     response.each { |item| assert_equal 'Item Sit Esse', item.name }
   end
 
-  def test_it_finds_one_by_item_name
-    response = repo.find_by_item_name('Item Sit Esse')
+  def test_it_finds_one_by_name
+    response = repo.find_by_name('Item Sit Esse')
     assert_equal 'Item Sit Esse', response.name
   end
 
-  def test_it_finds_by_item_id
-    response = repo.find_by_item_id('2481')
-    assert_equal '2481', response.id
+  def test_it_finds_by_id
+    response = repo.find_by_id(2481)
+    assert_equal 2481, response.id
   end
 
   def test_it_finds_all_by_item_description
@@ -58,25 +58,25 @@ class ItemRepositoryTest < MiniTest::Test
   end
 
   def test_it_finds_all_by_unit_price
-    response = repo.find_all_by_unit_price('92637')
+    response = repo.find_all_by_unit_price(BigDecimal.new('926.37'))
     assert_equal 2, response.count
-    response.each { |item| assert_equal '92637', item.unit_price }
+    response.each { |item| assert_equal 92637, item.unit_price }
   end
 
   def test_it_finds_one_by_unit_price
-    response = repo.find_by_unit_price('92637')
-    assert_equal '92637', response.unit_price
+    response = repo.find_by_unit_price(BigDecimal.new('926.37'))
+    assert_equal 92637, response.unit_price
   end
 
   def test_it_finds_all_by_merchant_id
-    response = repo.find_all_by_merchant_id('100')
+    response = repo.find_all_by_merchant_id(100)
     assert_equal 4, response.count
-    response.each { |item| assert_equal '100', item.merchant_id }
+    response.each { |item| assert_equal 100, item.merchant_id }
   end
 
   def test_it_finds_one_by_merchant_id
-    response = repo.find_by_merchant_id('100')
-    assert_equal '100', response.merchant_id
+    response = repo.find_by_merchant_id(100)
+    assert_equal 100, response.merchant_id
   end
 
   def test_it_finds_by_item_created_at

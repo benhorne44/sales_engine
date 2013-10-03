@@ -30,18 +30,23 @@ class Item
     invoice_item_repo.find_all_by_item_id(id)
   end
 
-  def best_day
-    invoices_grouped_by_customer = successful_invoices.group_by {|inv| inv.customer_id}
-    fav_customer_id = nil
-    favorite_customer_inv_count = 0
-    invoices_grouped_by_customer.each do |customer_id, customer_invoices|
-      customer_invoices_count = customer_invoices.count
-      if customer_invoices_count > favorite_customer_inv_count
-        fav_customer_id = customer_id
-        favorite_customer_inv_count = customer_invoices_count
-      end
+  def successful_invoice_items
+    invoice_items.select { |invoice_item| invoice_item.invoice.successful? }
+  end
+
+  def quantities_by_date
+    successful_invoice_items.each_with_object({}) do |invoice_item, hash|
+    if hash[invoice_item.invoice.created_at]
+       hash[invoice_item.invoice.created_at] += invoice_item.quantity
+    else
+      hash[invoice_item.invoice.created_at] = invoice_item.quantity
     end
-    customer_repo.find_by_id(fav_customer_id)
+    end
+  end
+
+  def best_day
+    hash = quantities_by_date.sort_by { |id, quantity| -quantity }
+    return Date.parse(hash.first[0])
   end
 
 end

@@ -84,13 +84,23 @@ class ItemRepository
   end
 
   def most_revenue(number)
-    puts "hello"
+    hash = engine.invoice_item_repository.subtotal_per_invoice_items.sort_by { |id, total| -total }
+    answers = []
+    hash.first(number).each do |value|
+      answers.push(find_by_id(value[0]))
+      # answers.push(find_by_id(value[0]))
+    end
+    return answers
   end
-  
+
   def most_items(number)
-    puts "howdy"
+    hash = engine.invoice_item_repository.items_for_invoice_items.sort_by { |id, total| -total }
+    answers = []
+    hash.first(number).each do |value|
+      answers.push(find_by_id(value[0]))
+      # answers.push(find_by_id(value[0]))
+    end
+    return answers
   end
-
-
 
 end

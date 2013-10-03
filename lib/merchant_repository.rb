@@ -57,16 +57,31 @@ class MerchantRepository
   end
 
   def most_revenue(number)
-    sorted_merchants = merchants.sort_by { |merchant| merchant.subtotal }
-    sorted_merchants.reverse.take(number)
-  end
-
-  def most_items(number)
-    puts 'most_items'
+    sorted_merchants_by_revenue = merchants.sort_by { |merchant| merchant.subtotal }
+    sorted_merchants_by_revenue.reverse.take(number)
   end
 
   def revenue(date)
-    puts 'total_rev_for_date'
+    revenue = 0
+    merchants.each do |merchant|
+      revenue += merchant.revenue(date)
+    end
+    return revenue
+  end
+
+  def most_items(number)
+    top_merchants = merchants.sort_by { |merchant| -merchant.total_items_sold }
+    top_merchants.first(number)
   end
 
 end
+
+
+
+
+
+
+
+
+
+

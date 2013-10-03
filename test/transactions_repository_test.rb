@@ -10,11 +10,11 @@ class TransactionRepositoryTest < MiniTest::Test
   
   def setup
     @engine ||= SalesEngine.new
-    @engine.transactions_repository.load_file('./data/transactions_test.csv')
+    @engine.transaction_repository.load_file('./data/transactions_test.csv')
   end
 
   def repo
-    @engine.transactions_repository 
+    @engine.transaction_repository 
   end
 
   def test_it_gives_random_transaction
@@ -29,20 +29,20 @@ class TransactionRepositoryTest < MiniTest::Test
     assert_operator match, :<, 20
   end
 
-  def test_it_finds_by_transaction_id
-    response = repo.find_by_transaction_id('5593')
-    assert_equal '5593', response.id
+  def test_it_finds_by_id
+    response = repo.find_by_id(5593)
+    assert_equal 5593, response.id
   end
 
   def test_it_finds_all_by_invoice_id
-    response = repo.find_all_by_invoice_id('4842')
+    response = repo.find_all_by_invoice_id(4842)
     assert_equal 3, response.count
-    response.each { |transaction| assert_equal '4842', transaction.invoice_id }
+    response.each { |transaction| assert_equal 4842, transaction.invoice_id }
   end
 
   def test_it_finds_one_by_invoice_id
-    response = repo.find_by_invoice_id('4842')
-    assert_equal '4842', response.invoice_id
+    response = repo.find_by_invoice_id(4842)
+    assert_equal 4842, response.invoice_id
   end
 
   def test_it_finds_all_by_credit_card_number
@@ -69,34 +69,34 @@ class TransactionRepositoryTest < MiniTest::Test
   # end
 
   def test_it_finds_all_by_transaction_result
-    response = repo.find_all_by_transaction_result('failed')
+    response = repo.find_all_by_result('failed')
     assert_equal 2, response.count
     response.each { |transaction| assert_equal 'failed', transaction.result }
   end
 
   def test_it_finds_one_by_transaction_result
-    response = repo.find_by_transaction_result('failed')
+    response = repo.find_by_result('failed')
     assert_equal 'failed', response.result
   end
 
   def test_it_finds_by_transaction_created_at
-    response = repo.find_by_transaction_created_at('2012-03-27 14:58:15 UTC')
+    response = repo.find_by_created_at('2012-03-27 14:58:15 UTC')
     assert_equal '2012-03-27 14:58:15 UTC', response.created_at
   end
 
   def test_it_finds_all_by_transaction_created_at
-    response = repo.find_all_by_transaction_created_at('2012-03-27 14:58:15 UTC')
+    response = repo.find_all_by_created_at('2012-03-27 14:58:15 UTC')
     assert_equal 4, response.count
     response.each { |transaction| assert_equal '2012-03-27 14:58:15 UTC', transaction.created_at }
   end
 
   def test_it_finds_by_transaction_updated_at
-    response = repo.find_by_transaction_updated_at('2012-03-27 14:58:15 UTC')
+    response = repo.find_by_updated_at('2012-03-27 14:58:15 UTC')
     assert_equal '2012-03-27 14:58:15 UTC', response.updated_at
   end
 
   def test_it_finds_all_by_transaction_updated_at
-    response = repo.find_all_by_transaction_updated_at('2012-03-27 14:58:15 UTC')
+    response = repo.find_all_by_updated_at('2012-03-27 14:58:15 UTC')
     assert_equal 4, response.count
     response.each { |transaction| assert_equal '2012-03-27 14:58:15 UTC', transaction.updated_at }
   end

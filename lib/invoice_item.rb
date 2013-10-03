@@ -28,4 +28,8 @@ class InvoiceItem
     invoice_repo.find_by_id(invoice_id)
   end
 
+  def subtotal
+    quantity * unit_price
+  end
+
 end

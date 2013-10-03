@@ -4,7 +4,7 @@ class Transaction
 
   def initialize(input, engine)
     @id = input[:id].to_i
-    @credit_card_number = input[:credit_card_number].to_i
+    @credit_card_number = input[:credit_card_number]
     @credit_card_expiration_date = input[:credit_card_expiration_date]
     @result = input[:result]
     @invoice_id = input[:invoice_id].to_i

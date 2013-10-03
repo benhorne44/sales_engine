@@ -29,6 +29,21 @@ class Merchant
     @successful_invoices ||= invoices.select { |invoice| invoice.successful? }
   end
 
+  def successful_invoice_items
+    successful_invoices.collect do |invoice| 
+      invoice.invoice_items
+    end
+  end
+
+  def total_items_sold
+    total = 0
+    successful_invoice_items.flatten.each do |invoice_item|
+      total += invoice_item.quantity
+    end
+    return total
+  end
+
+
   def pending_invoices
     invoices.reject { |invoice| invoice.successful?}
   end
@@ -50,7 +65,7 @@ class Merchant
   end
 
   def successful_invoices_for_given_date(date)
-    successful_invoices.find_all{|invoice| invoice.created_at == date}
+    successful_invoices.find_all{|invoice| Date.parse(invoice.created_at) == date}
   end
 
   def total_for_invoices(list_of_invoices)
@@ -61,7 +76,7 @@ class Merchant
   end
 
   def subtotal_for(date)
-    total_for_invoices successful_invoices_for_given_date(date)
+    total_for_invoices(successful_invoices_for_given_date(date))
   end
 
   def revenue(date = nil)
@@ -90,10 +105,6 @@ class Merchant
       end
     end
     customer_repo.find_by_id(fav_customer_id)
-  end
-
-  def method_name
-    
   end
 
 

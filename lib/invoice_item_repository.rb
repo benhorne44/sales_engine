@@ -56,7 +56,8 @@ class InvoiceItemRepository
   end
 
   def find_all_by_unit_price(price)
-    invoice_items.find_all{|i| i.unit_price == price }
+    price_in_cents = price*100
+    invoice_items.find_all{|i| i.unit_price == price_in_cents.to_i }
   end
 
   def find_by_invoice_item_created_at(date)
@@ -79,5 +80,29 @@ class InvoiceItemRepository
     invoice_items
   end
 
+  def successful_invoice_items
+    invoice_items.select { |invoice_item| invoice_item.invoice.successful? }
+  end
 
+  def subtotal_per_invoice_items
+    successful_invoice_items.each_with_object({}) do |invoice_item, hash|
+    if hash[invoice_item.item_id]
+       hash[invoice_item.item_id] += invoice_item.subtotal
+    else
+      hash[invoice_item.item_id] = invoice_item.subtotal
+    end
+    end
+  end
+
+  def items_for_invoice_items
+    successful_invoice_items.each_with_object({}) do |invoice_item, hash|
+    if hash[invoice_item.item_id]
+       hash[invoice_item.item_id] += invoice_item.quantity
+    else
+      hash[invoice_item.item_id] = invoice_item.quantity
+    end  
+    end
+  end
+
+  
 end

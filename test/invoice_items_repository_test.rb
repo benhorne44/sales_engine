@@ -33,41 +33,41 @@ class InvoiceItemRepositoryTest < MiniTest::Test
   end
 
   def test_it_finds_all_by_item_id
-    response = repo.find_all_by_item_id('2055')
+    response = repo.find_all_by_item_id(2055)
     assert_equal 2, response.count
-    response.each { |invoice_item| assert_equal '2055', invoice_item.item_id }
+    response.each { |invoice_item| assert_equal 2055, invoice_item.item_id }
   end
 
   def test_it_finds_one_by_item_id
-    response = repo.find_by_item_id('2055')
-    assert_equal '2055', response.item_id
+    response = repo.find_by_item_id(2055)
+    assert_equal 2055, response.item_id
   end
 
   def test_it_finds_by_invoice_item_id
-    response = repo.find_by_invoice_item_id('21687')
-    assert_equal '21687', response.id
+    response = repo.find_by_id(21687)
+    assert_equal 21687, response.id
   end
 
   def test_it_finds_all_by_quantity
-    response = repo.find_all_by_quantity('3')
+    response = repo.find_all_by_quantity(3)
     assert_equal 2, response.count
-    response.each { |invoice_item| assert_equal '3', invoice_item.quantity }
+    response.each { |invoice_item| assert_equal 3, invoice_item.quantity }
   end
 
   def test_it_finds_by_quantity
-    response = repo.find_by_quantity('3')
-    assert_equal '3', response.quantity
+    response = repo.find_by_quantity(3)
+    assert_equal 3, response.quantity
   end
 
   def test_it_finds_by_unit_price
-    response = repo.find_by_unit_price('54368')
-    assert_equal '54368', response.unit_price
+    response = repo.find_by_unit_price(BigDecimal.new('543.68'))
+    assert_equal 54368, response.unit_price
   end
 
   def test_it_finds_all_by_unit_price
-    response = repo.find_all_by_unit_price('54368')
+    response = repo.find_all_by_unit_price(BigDecimal.new('543.68'))
     assert_equal 2, response.count
-    response.each { |invoice_item| assert_equal '54368', invoice_item.unit_price }
+    response.each { |invoice_item| assert_equal 54368, invoice_item.unit_price }
   end
 
   def test_it_finds_by_invoice_item_created_at

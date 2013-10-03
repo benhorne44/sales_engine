@@ -23,7 +23,7 @@ class Customer
   end
 
   def transactions_repo
-    @transactions_repo ||= engine.transactions_repository
+    @transactions_repo ||= engine.transaction_repository
   end
 
   def transactions

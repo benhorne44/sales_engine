@@ -52,8 +52,8 @@ class CustomerRepositoryTest < MiniTest::Test
   end
 
   def test_it_finds_by_customer_id
-    response = customer_repository.find_by_id('3')
-    assert_equal '3', response.id
+    response = customer_repository.find_by_id(3)
+    assert_equal 3, response.id
   end
 
   def test_it_finds_by_customer_created_at

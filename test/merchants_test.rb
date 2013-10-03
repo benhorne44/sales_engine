@@ -20,10 +20,4 @@ class MerchantTest < MiniTest::Test
   @merchant = @engine.merchant_repository.find_by_id(1)
  end
 
- def test_it_finds_favorite_customer
-  # result = @merchant.favorite_customer
-
-  assert_equal '2', @merchant
-   
- end
 end
