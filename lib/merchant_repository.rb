@@ -9,7 +9,6 @@ class MerchantRepository
 
   def load_file(filename)
     @contents = CSV.read"#{filename}", headers: true, header_converters: :symbol
-    return @contents
   end
 
   def merchants
@@ -57,21 +56,19 @@ class MerchantRepository
   end
 
   def most_revenue(number)
-    sorted_merchants_by_revenue = merchants.sort_by { |merchant| merchant.subtotal }
-    sorted_merchants_by_revenue.reverse.take(number)
+    sort_merchants_by_revenue.reverse.take(number)
+  end
+
+  def sort_merchants_by_revenue
+    merchants.sort_by { |merchant| merchant.subtotal }
   end
 
   def revenue(date)
-    revenue = 0
-    merchants.each do |merchant|
-      revenue += merchant.revenue(date)
-    end
-    return revenue
+    merchants.inject(0) {|total_revenue, merchant| total_revenue += merchant.revenue(date)}
   end
 
   def most_items(number)
-    top_merchants = merchants.sort_by { |merchant| -merchant.total_items_sold }
-    top_merchants.first(number)
+    merchants.sort_by { |merchant| merchant.total_items_sold }.reverse[0,number]
   end
 
 end

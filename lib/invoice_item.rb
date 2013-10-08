@@ -32,4 +32,8 @@ class InvoiceItem
     quantity * unit_price
   end
 
+  def exists?
+    engine.invoice_item_repository.find_by_id(id)
+  end
+
 end

@@ -12,14 +12,17 @@ class CustomerTest < MiniTest::Test
     load_csv_files
   end
 
-
   def engine
-    engine ||= SalesEngine.new
+    @engine ||= SalesEngine.new
   end
 
   def load_csv_files
     engine.customer_repository.load_file('./data/customers_test.csv')
     engine.invoice_repository.load_file('./data/invoices_test.csv')
+  end
+
+  def test_it_finds_all_invoices_by_customer_id
+    customer = Customer.new({id: })
   end
 
 

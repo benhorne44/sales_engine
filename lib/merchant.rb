@@ -30,34 +30,23 @@ class Merchant
   end
 
   def successful_invoice_items
-    successful_invoices.collect do |invoice| 
-      invoice.invoice_items
-    end
+    successful_invoices.collect { |inv| inv.invoice_items }.flatten
   end
 
   def total_items_sold
-    total = 0
-    successful_invoice_items.flatten.each do |invoice_item|
-      total += invoice_item.quantity
-    end
-    return total
+    successful_invoice_items.inject(0) {|total, invoice_item| total += invoice_item.quantity}
   end
-
 
   def pending_invoices
     invoices.reject { |invoice| invoice.successful?}
   end
 
   def customers_with_pending_invoices
-    pending_invoices.collect do |invoice|
-      customer_repo.find_by_id(invoice.customer_id)
-    end
+    pending_invoices.collect { |inv| customer_repo.find_by_id(inv.customer_id) }
   end
 
   def subtotal
-    @subtotal ||= successful_invoices.collect do |invoice|
-      invoice.total
-    end.reduce(0, :+)
+    @subtotal ||= successful_invoices.inject(0) { |subtotal, invoice| subtotal += invoice.total } 
   end
 
   def customer_repo
@@ -69,10 +58,7 @@ class Merchant
   end
 
   def total_for_invoices(list_of_invoices)
-    invoice_totals = list_of_invoices.collect do |invoice|
-      invoice.total
-    end
-    invoice_totals.reduce(0,:+)
+    list_of_invoices.inject(0) { |total, invoice| total += invoice.total}
   end
 
   def subtotal_for(date)
@@ -88,23 +74,19 @@ class Merchant
   end
 
   def customers
-    invoices.collect do |invoice|
-      customer_repo.find_by_id(invoice.customer_id)
-    end
+    invoices.collect { |invoice| customer_repo.find_by_id(invoice.customer_id) }
+  end
+
+  def invoices_by_customer_id
+    successful_invoices.group_by {|inv| inv.customer_id}
   end
 
   def favorite_customer
-    invoices_grouped_by_customer = successful_invoices.group_by {|inv| inv.customer_id}
-    fav_customer_id = nil
-    favorite_customer_inv_count = 0
-    invoices_grouped_by_customer.each do |customer_id, customer_invoices|
-      customer_invoices_count = customer_invoices.count
-      if customer_invoices_count > favorite_customer_inv_count
-        fav_customer_id = customer_id
-        favorite_customer_inv_count = customer_invoices_count
-      end
-    end
-    customer_repo.find_by_id(fav_customer_id)
+    customer_repo.find_by_id(favorite_customer_id)
+  end
+
+  def favorite_customer_id
+    invoices_by_customer_id.max_by {|id, invoices| invoices.count}[0]
   end
 
 

@@ -106,29 +106,48 @@ class InvoiceRepositoryTest < MiniTest::Test
     assert_equal 4, response.count
   end
 
-  def test_it_creates_an_invoice
-    @engine.customer_repository.load_file('./data/customers.csv')
-    @engine.merchant_repository.load_file('./data/merchants.csv')
-    @engine.item_repository.load_file('./data/items.csv')
-    customer = @engine.customer_repository.find_by_id(7)
-    merchant = @engine.merchant_repository.find_by_id(22)
-    items = (1..3).map { @engine.item_repository.random  }
-    results = @engine.invoice_repository.create(customer: customer, merchant: merchant, items: items)
-
-    assert_equal Invoice, results.class
+  def test_it_finds_last_invoice_id
+    result = @engine.invoice_repository.last_invoice_id
+    assert_equal 4845, result
   end
 
-  def test_it_creates_an_invoice_item
+
+
+  # def test_it_creates_an_invoice
+  #   @engine.customer_repository.load_file('./data/customers.csv')
+  #   @engine.merchant_repository.load_file('./data/merchants.csv')
+  #   @engine.item_repository.load_file('./data/items.csv')
+  #   customer = @engine.customer_repository.find_by_id(7)
+  #   merchant = @engine.merchant_repository.find_by_id(22)
+  #   items = (1..3).map { @engine.item_repository.random  }
+  #   results = @engine.invoice_repository.create(customer: customer, merchant: merchant, items: items)
+
+  #   assert_equal Invoice, results.class
+  # end
+
+  def test_it_creates_an_invoice
     customer = Customer.new({id: 7 }, @engine)
     merchant = Merchant.new({id: 22}, @engine) 
     items = [Item.new({id: 1, unit_price: 3333}, @engine), Item.new({id: 2, unit_price: 3333}, @engine), Item.new({id: 1, unit_price: 3333}, @engine)]
-    invoice = Invoice.new({id: 1}, @engine)
     hash = {customer: customer, merchant: merchant, items: items} 
-    result_hash = @engine.invoice_repository.format_invoice_item_data(hash, invoice)
+    result = @engine.invoice_repository.create(hash)
+    assert_equal Invoice, result.class
+    assert_equal 7, result.customer_id
+    assert_equal 22, result.merchant_id
 
-    # final_hash = {id: , item_id:, invoice_id:, quantity:, unit_price:, created_at:, updated_at: }
-    assert_equal 2, result_hash
   end
+
+  # def test_it_creates_an_invoice_item
+  #   customer = Customer.new({id: 7 }, @engine)
+  #   merchant = Merchant.new({id: 22}, @engine) 
+  #   items = [Item.new({id: 1, unit_price: 3333}, @engine), Item.new({id: 2, unit_price: 3333}, @engine), Item.new({id: 1, unit_price: 3333}, @engine)]
+  #   invoice = Invoice.new({id: 1}, @engine)
+  #   hash = {customer: customer, merchant: merchant, items: items} 
+  #   # result_hash = @engine.invoice_repository.format_invoice_item_data(hash, invoice)
+
+  #   # final_hash = {id: , item_id:, invoice_id:, quantity:, unit_price:, created_at:, updated_at: }
+  #   assert_equal 2, r
+  # end
 
 
 end

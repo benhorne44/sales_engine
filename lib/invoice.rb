@@ -24,17 +24,15 @@ class Invoice
   end
 
   def total
-    @total ||= invoice_items.collect do |invoice_item|
-      invoice_item.quantity * invoice_item.unit_price
-    end.reduce(0, :+)
+    @total ||= inv_item_repo.invoice_items_by_invoice_id[id].inject(0) { |sum, inv_item| sum += inv_item.subtotal }
   end
 
-  def invoice_item_repo
-    @invoice_item_repo ||= engine.invoice_item_repository
+  def inv_item_repo
+    @inv_item_repo ||= engine.invoice_item_repository
   end
 
   def invoice_items
-    invoice_item_repo.find_all_by_invoice_id(id)
+    inv_item_repo.find_all_by_invoice_id(id)
   end
 
   def items
