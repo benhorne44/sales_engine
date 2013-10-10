@@ -1,5 +1,5 @@
 require 'csv'
-
+require 'time'
 
 class InvoiceItemRepository
 
@@ -21,7 +21,7 @@ class InvoiceItemRepository
   def load_invoice_items
     @contents.collect { |row| InvoiceItem.new(row, engine) }
   end
-  
+
   def random
     invoice_items.sample
   end
@@ -91,13 +91,13 @@ class InvoiceItemRepository
   end
 
   def subtotal_per_invoice_items
-    successful_invoice_items.each_with_object(Hash.new(0)) do |invoice_item, subtotal| 
+    successful_invoice_items.each_with_object(Hash.new(0)) do |invoice_item, subtotal|
       subtotal[invoice_item] += invoice_item.subtotal
     end
   end
 
   def items_for_invoice_items
-    successful_invoice_items.each_with_object(Hash.new(0)) do |invoice_item, item_total| 
+    successful_invoice_items.each_with_object(Hash.new(0)) do |invoice_item, item_total|
       item_total[invoice_item] += invoice_item.quantity
     end
   end
@@ -106,41 +106,23 @@ class InvoiceItemRepository
     invoice_items.max_by {|invoice_item| invoice_item.id}.id + 1
   end
 
-  def create(invoice_data, new_invoice)
-    q = []
-    formatted_data_hashes = invoice_data[:items].each do |item|
-      data_per_item = {
-        created_id: last_invoice_item_id,
-        item_id: item.id,
-        invoice_id: invoice_data[:id],
-        quantity: invoice_data[:items].select { |items| items.id == item.id }.count,
-        unit_price: item.unit_price,
-        created_at: Time.now,
-        updated_at: Time.now
-      }
 
-      new_invoice_item = InvoiceItem.new(data_per_item, engine)
-      unless exists?(new_invoice_item)
-        add_new_invoice_to_all(new_invoice_item)
-      end
-    end
-  end
+11
+  # def add_new_invoice_to_all(new_invoice_item)
+  #   engine.invoice_item_repository.all.push(new_invoice_item)
+  # end
 
-  def add_new_invoice_to_all(new_invoice_item)
-    engine.invoice_item_repository.all.push(new_invoice_item)
-  end
-
-  def exists?(new_invoice_item)
-    engine.invoice_item_repository.find_by_id(new_invoice_item.id)
-  end
+  # def exists?(new_invoice_item)
+  #   engine.invoice_item_repository.find_by_id(new_invoice_item.id)
+  # end
 
   def invoice_items_by_invoice_id
     @invoice_items_by_invoice_id ||= invoice_items.group_by { |invoice_item| invoice_item.invoice_id}
   end
 
-  def update_items_for_new_invoice(new_invoice, items)
-    items.each {|item| invoice_items.items.push(item) }
-  end
+  # def update_items_for_new_invoice(new_invoice, items)
+  #   items.each {|item| invoice_items.items.push(item) }
+  # end
 
-  
+
 end
